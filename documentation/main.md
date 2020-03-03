@@ -66,7 +66,7 @@ constexpr auto transpose(MatrixView& matrix)
 
 Vráti transponovanú maticu `matrix`.
 
-`transpose<true>(matrix)` volá `transpose<true>(matrix, _)`.
+`transpose<true>(matrix)` volá `transpose<true>(matrix, _)`.\
 `transpose<false>(matrix)` volá `transpose<true>(matrix, is_square(matrix))`.
 
 ## determinant
@@ -96,5 +96,5 @@ Vráti determinant matice `matrix`.
 
 `flags::square` ako pri (1).
 
-Ak je nastavené `flags::triangular` volá `determinant<flags>(matrix, true)`.
+Ak je nastavené `flags::triangular` volá `determinant<flags>(matrix, true)`.\
 Inak volá `determinant<flags>(matrix, is_triangular(matrix))`.
