@@ -26,18 +26,20 @@
 
 namespace flag
 {
-	constexpr std::size_t		none = 0 << 0;
-	constexpr std::size_t      range = 1 << 0;
-	constexpr std::size_t     square = 1 << 1;
-	constexpr std::size_t       same = 1 << 2;
-	constexpr std::size_t		 one = 1 << 3;
-	constexpr std::size_t	    size = 1 << 4;
-	constexpr std::size_t triangular = 1 << 5;
-	constexpr std::size_t	  height = 1 << 6;
+	using bitmask = std::size_t;
+
+	constexpr bitmask		none = 0 << 0;
+	constexpr bitmask      range = 1 << 0;
+	constexpr bitmask     square = 1 << 1;
+	constexpr bitmask       same = 1 << 2;
+	constexpr bitmask		 one = 1 << 3;
+	constexpr bitmask	    size = 1 << 4;
+	constexpr bitmask triangular = 1 << 5;
+	constexpr bitmask	  height = 1 << 6;
 }
-constexpr bool flag_set(std::size_t mask, std::size_t flag)
+constexpr bool flag_set(flag::bitmask bitmask, std::size_t flag)
 {
-	return (mask & flag) != 0;
+	return (bitmask & flag) != 0;
 }
 
 template <typename Iterator, typename Sentinel>
@@ -393,7 +395,7 @@ constexpr auto is_diagonal(const MatrixView& matrix)
 	return is_upper_triangular(matrix) && is_lower_triangular(matrix);
 }
 
-template <std::size_t flags = flag::none, typename MatrixViewA, typename MatrixViewB, typename MatrixViewResult>
+template <flag::bitmask flags = flag::none, typename MatrixViewA, typename MatrixViewB, typename MatrixViewResult>
 constexpr void multiply(const MatrixViewA& A, const MatrixViewB& B, MatrixViewResult& result)
 {
 	if constexpr (flag_set(flags, flag::size))
@@ -412,7 +414,7 @@ constexpr void multiply(MatrixView& matrix, const T& scalar)
 	for (auto&& element : matrix)
 		element *= scalar;
 }
-template <std::size_t flags = flag::none, typename MatrixViewA, typename MatrixViewB>
+template <flag::bitmask flags = flag::none, typename MatrixViewA, typename MatrixViewB>
 constexpr auto& add(MatrixViewA& A, const MatrixViewB& B)
 {
 	if constexpr (flag_set(flags, flag::size))
@@ -489,7 +491,7 @@ namespace detail
 	}
 }
 
-template <std::size_t flags = flag::none, typename MatrixView>
+template <flag::bitmask flags = flag::none, typename MatrixView>
 constexpr void swap_rows(MatrixView& matrix, std::size_t i1, std::size_t i2)
 {
 	detail::check_row_indices<flag_set(flags, flag::range)>(matrix, i1, i2);
@@ -500,7 +502,7 @@ constexpr void swap_rows(MatrixView& matrix, std::size_t i1, std::size_t i2)
 
 	swap_ranges(row_sentinel(matrix, i1), row_sentinel(matrix, i2));
 }
-template <std::size_t flags = flag::none, typename MatrixView, typename T>
+template <flag::bitmask flags = flag::none, typename MatrixView, typename T>
 constexpr void multiply_row(MatrixView& matrix, std::size_t index, const T& scalar)
 {
 	detail::check_row_indices<flag_set(flags, flag::range)>(matrix, index);
@@ -512,7 +514,7 @@ constexpr void multiply_row(MatrixView& matrix, std::size_t index, const T& scal
 	for (auto& element : row_sentinel(matrix, index))
 		element *= scalar;
 }
-template <std::size_t flags = flag::none, typename MatrixView, typename T>
+template <flag::bitmask flags = flag::none, typename MatrixView, typename T>
 constexpr void divide_row(MatrixView& matrix, std::size_t index, const T& scalar)
 {
 	detail::check_row_indices<flag_set(flags, flag::range)>(matrix, index);
@@ -524,7 +526,7 @@ constexpr void divide_row(MatrixView& matrix, std::size_t index, const T& scalar
 	for (auto& element : row_sentinel(matrix, index))
 		element /= scalar;
 }
-template <std::size_t flags = flag::none, typename MatrixView>
+template <flag::bitmask flags = flag::none, typename MatrixView>
 constexpr auto simplify_row(MatrixView& matrix, std::size_t index)
 {
 	detail::check_row_indices<flag_set(flags, flag::range)>(matrix, index);
@@ -547,7 +549,7 @@ constexpr auto simplify_row(MatrixView& matrix, std::size_t index)
 	}
 	return gcd;
 }
-template <std::size_t flags = flag::none, typename MatrixView, typename T>
+template <flag::bitmask flags = flag::none, typename MatrixView, typename T>
 constexpr void add_rows(MatrixView& matrix, std::size_t i1, const T& scalar, std::size_t i2)
 {
 	detail::check_row_indices<flag_set(flags, flag::range)>(matrix, i1, i2);
@@ -707,7 +709,7 @@ constexpr auto REF_reduced_rank(MatrixView& matrix)
 {
 	return REF<true, false, true>(matrix);
 }
-template <std::size_t flags = flag::none, typename MatrixView>
+template <flag::bitmask flags = flag::none, typename MatrixView>
 constexpr auto determinant(MatrixView& matrix, [[maybe_unused]] bool triangular)
 {
 	if constexpr (flag_set(flags, flag::square))
@@ -731,9 +733,9 @@ constexpr auto determinant(MatrixView& matrix, [[maybe_unused]] bool triangular)
 			return REF_det(matrix);
 		else
 			return determinant<flags | flag::triangular>(matrix, true);
-	}	
+	}
 }
-template <std::size_t flags = flag::none, typename MatrixView>
+template <flag::bitmask flags = flag::none, typename MatrixView>
 constexpr auto determinant(MatrixView& matrix)
 {
 	if constexpr (flag_set(flags, flag::triangular))
@@ -741,7 +743,7 @@ constexpr auto determinant(MatrixView& matrix)
 	else
 		return determinant<flags>(matrix, is_triangular(matrix));
 }
-template <std::size_t flags = flag::none, typename MatrixView, typename MatrixViewVector>
+template <flag::bitmask flags = flag::none, typename MatrixView, typename MatrixViewVector>
 constexpr std::make_signed_t<std::size_t> solve_linear_equations(MatrixView& m, MatrixViewVector& vector)
 {
 	if constexpr (flag_set(flags, flag::height))

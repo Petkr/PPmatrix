@@ -19,9 +19,7 @@ constexpr void multiply(const MatrixViewA& A, const MatrixViewB& B, MatrixViewRe
 
 Násobí maticu `A` maticou `B`. Výsledok uloží do matice `result`.
 
-###### flags
-
-`flags::size` - zapne kontrolu správnych rozmerov matíc
+`flags::size` zapne kontrolu správnych rozmerov matíc
 
 (2)
 
@@ -41,9 +39,7 @@ constexpr auto& add(MatrixViewA& A, const MatrixViewB& B)
 
 Pripočíta k matici `A` maticu `B`. Referenciou vráti `A` po pričítaní.
 
-###### flags
-
-`flags::size` - zapne kontrolu správnych rozmerov matíc
+`flags::size` zapne kontrolu správnych rozmerov matíc
 
 ## transpose
 
@@ -54,9 +50,10 @@ template <bool const_square = false, typename MatrixView>
 constexpr auto transpose(MatrixView& matrix, bool square)
 ```
 
-Transponuje maticu `matrix`.
+Vráti transponovanú maticu `matrix`.
 
-Ak je `const_square` alebo `square` `true`, transponuje, akoby bola `matrix` štvorcová. Inak použije všeobecný algoritmus.
+Ak je `const_square` alebo `square` `true`, transponuje, akoby bola `matrix` štvorcová matica.\
+Inak použije [všeobecný algoritmus](https://www.geeksforgeeks.org/inplace-m-x-n-size-matrix-transpose).
 
 `transpose<true>(matrix, b)` nekontroluje `b`.
 
@@ -67,8 +64,37 @@ template <bool const_square = false, typename MatrixView>
 constexpr auto transpose(MatrixView& matrix)
 ```
 
-Transponuje maticu `matrix`.
+Vráti transponovanú maticu `matrix`.
 
 `transpose<true>(matrix)` volá `transpose<true>(matrix, _)`.
-
 `transpose<false>(matrix)` volá `transpose<true>(matrix, is_square(matrix))`.
+
+## determinant
+
+(1)
+
+```
+template <std::size_t flags = flag::none, typename MatrixView>
+constexpr auto determinant(MatrixView& matrix, bool triangular)
+```
+
+Vráti determinant matice `matrix`.
+
+`flags::square` zapne kontrolu, či je `matrix` štvorcová matica.
+
+Ak je nastavené `flags::triangular` alebo `triangular` `true`, spočíta determinant, akoby bola `matrix` trojuholníková matica.\
+Inak použije všeobecný algoritmus.
+
+(2)
+
+```
+template <flag::bitmask flags = flag::none, typename MatrixView>
+constexpr auto determinant(MatrixView& matrix)
+```
+
+Vráti determinant matice `matrix`.
+
+`flags::square` ako pri (1).
+
+Ak je nastavené `flags::triangular` volá `determinant<flags>(matrix, true)`.
+Inak volá `determinant<flags>(matrix, is_triangular(matrix))`.
