@@ -249,7 +249,7 @@ namespace detail
 		}
 	};
 	template <typename MatrixView>
-	column_sentinel(MatrixView&&, std::size_t)->column_sentinel<begin_t<MatrixView>>;
+	column_sentinel(MatrixView&&, std::size_t) -> column_sentinel<begin_t<MatrixView>>;
 }
 
 template <typename MatrixView>

@@ -2,7 +2,7 @@
 
 Knižnica pre prácu s maticami.
 
-## Operácie na maticiach:
+## Operácie na maticiach
 
 * sčítanie
 * násobenie matice maticou a skalárom
@@ -15,7 +15,14 @@ Knižnica pre prácu s maticami.
 
 ## Technické detaily
 
-Knižnica implementuje všetky operácie ako nečlenské šablónové funkcie.
-Definuje "myšlienkový koncept" MatrixView, ktorý tieto funkcie používajú.
-Na objekt M typu MatrixView sa dajú zavolať funkcie begin(M); end(M); width(M);
-Nedefinuje MatrixView ako concept z C++20, hoci by to bolo možné.
+Knižnica implementuje všetky maticové operácie ako nečlenské šablónové funkcie.
+
+Definuje "myšlienkový koncept" `MatrixView`, ktorý tieto funkcie používajú.
+
+Typ `T` spĺňa koncept `MatrixView`, ak sa na jeho objekt `M` dajú zavolať funkcie `begin(M)`, `end(M)` a `width(M).`
+
+Nedefinuje `MatrixView` ako concept z C++20, hoci by to bolo možné.
+
+## Dokumentácia
+
+[link](documentation/index.md)
