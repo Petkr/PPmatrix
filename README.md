@@ -25,4 +25,4 @@ Nedefinuje `MatrixView` ako concept z C++20, hoci by to bolo možné.
 
 ## Dokumentácia
 
-[link](documentation/index.md)
+[link](documentation/main.md)
