@@ -55,7 +55,7 @@ Vráti transponovanú maticu `matrix`.
 Ak je `const_square` alebo `square` `true`, transponuje, akoby bola `matrix` štvorcová matica.\
 Inak použije [všeobecný algoritmus](https://www.geeksforgeeks.org/inplace-m-x-n-size-matrix-transpose).
 
-`transpose<true>(matrix, b)` nekontroluje `b`.
+`transpose<true>(matrix, b)` ignoruje `b`.
 
 (2)
 
@@ -85,6 +85,8 @@ Vráti determinant matice `matrix`.
 Ak je nastavené `flags::triangular` alebo `triangular` `true`, spočíta determinant, akoby bola `matrix` trojuholníková matica.\
 Inak použije všeobecný algoritmus.
 
+Ak má `flags` nastavené `flags::triangular`, `determinant<flags>(matrix, b)` ignoruje `b`.
+
 (2)
 
 ```
@@ -96,5 +98,5 @@ Vráti determinant matice `matrix`.
 
 `flags::square` ako pri (1).
 
-Ak je nastavené `flags::triangular` volá `determinant<flags>(matrix, true)`.\
+Ak je nastavené `flags::triangular`, volá `determinant<flags>(matrix, _)`.\
 Inak volá `determinant<flags>(matrix, is_triangular(matrix))`.
