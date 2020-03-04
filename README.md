@@ -22,7 +22,7 @@ Nedefinuje `View` a `MatrixView` ako concept z C++20, hoci by to bolo možné.\
 Typ `T` spĺňa koncept `View`, ak sa na jeho objekt `V` dajú zavolať funkcie `begin(V)` a `end(V)`.\
 Typ `T` spĺňa koncept `MatrixView`, ak spĺňa `View` a na jeho objekt `M` sa dá zavolať funkcia `width(M)`.
 
-Implementuje generické algoritmy pracujúce s konceptom `View` (napr. [PPmatrix::copy](reference#copy)).
+Implementuje generické algoritmy pracujúce s konceptom `View` (napr. [PPmatrix::copy](reference.md#copy)).
 
 
 
