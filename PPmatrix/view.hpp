@@ -46,7 +46,7 @@ namespace PPmatrix
 	template <typename View>
 	using view_base_t = iterator_base_t<begin_t<View>>;
 
-	namespace detai
+	namespace detail
 	{
 		template <typename T>
 		struct initializer_list_wrapper

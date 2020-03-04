@@ -71,10 +71,10 @@ Napríklad na všetkých wrapper iteratoroch implementuje iba `operator+=`
 a v [operators.hpp](PPmatrix/operators.hpp) implementuje `operator++`
 ako volanie `operator+=` s argumentom 1.
 
-Iterator, ktorý používa `augmented_matrix_view` je na iterator *obrovský*.
+Iterator, ktorý používa [`augmented_matrix_view`](reference.md#augmented_matrix_view), je na iterator *obrovský*.
 Na 64-bit s internými iteratormi `T*` má 56B.
 
-`augmented_matrix_view` má hlúpo implementovaný `operator+=`,
+[`augmented_matrix_view`](reference.md#augmented_matrix_view) má hlúpo implementovaný `operator+=`,
 ktorý pre `x += n` volá n-krát `++x`.
 
 ## Licencia
