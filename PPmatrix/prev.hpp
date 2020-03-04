@@ -1,7 +1,10 @@
 #pragma once
 
-template <typename BiIterator>
-constexpr auto prev(BiIterator i)
+namespace PPmatrix
 {
-	return --i;
+	template <typename BiIterator>
+	constexpr auto prev(BiIterator i)
+	{
+		return --i;
+	}
 }

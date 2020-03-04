@@ -23,6 +23,31 @@ Typ `T` spĺňa koncept `MatrixView`, ak sa na jeho objekt `M` dajú zavolať fu
 
 Nedefinuje `MatrixView` ako concept z C++20, hoci by to bolo možné.
 
+## Príklad
+
+```
+PPmatrix::dynamic_matrix<int> A(2, 2);
+PPmatrix::copy({ 1, 2, 1, 3 }, A);
+
+PPmatrix::static_matrix<int, 2> b(1);
+PPmatrix::copy({ 10, 13 }, b);
+
+PPmatrix::pretty_print(std::cout, PPmatrix::augmented_matrix_view(A, b));
+
+PPmatrix::solve_linear_equations(A, b);
+
+PPmatrix::pretty_print(std::cout, b);
+```
+
+výstup:
+
+```
+| 1  2 10|
+| 1  3 13|
+|4|
+|3|
+```
+
 ## Dokumentácia
 
 [link](documentation/main.md)

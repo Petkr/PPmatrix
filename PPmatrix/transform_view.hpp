@@ -1,53 +1,56 @@
 #pragma once
 #include "simple_view.hpp"
 
-template <typename BaseIterator, typename Transform>
-class transform_iterator
+namespace PPmatrix
 {
-	compressed_pair<BaseIterator, Transform> pair;
-public:
-	constexpr transform_iterator(BaseIterator base_iterator, Transform t)
-		: pair{ base_iterator, t }
-	{}
-	constexpr decltype(auto) operator*()
+	template <typename BaseIterator, typename Transform>
+	class transform_iterator
 	{
-		return pair.second(*pair.first);
-	}
-	constexpr auto& operator+=(std::size_t offset)
+		compressed_pair<BaseIterator, Transform> pair;
+	public:
+		constexpr transform_iterator(BaseIterator base_iterator, Transform t)
+			: pair{ base_iterator, t }
+		{}
+		constexpr decltype(auto) operator*()
+		{
+			return pair.second(*pair.first);
+		}
+		constexpr auto& operator+=(std::size_t offset)
+		{
+			pair.first += offset;
+			return *this;
+		}
+		template <typename OtherIterator>
+		constexpr auto operator!=(OtherIterator other_iterator) const
+		{
+			return other_iterator != pair.first;
+		}
+	};
+
+	template <typename Functor>
+	struct transform
 	{
-		pair.first += offset;
-		return *this;
-	}
-	template <typename OtherIterator>
-	constexpr auto operator!=(OtherIterator other_iterator) const
+		Functor functor;
+		constexpr transform(Functor functor)
+			: functor(functor)
+		{}
+	};
+
+	template <typename Iterator, typename Functor>
+	constexpr auto operator&(Iterator i, transform<Functor> t)
 	{
-		return other_iterator != pair.first;
+		return transform_iterator(i, t.functor);
 	}
-};
 
-template <typename Functor>
-struct transform
-{
-	Functor functor;
-	constexpr transform(Functor functor)
-		: functor(functor)
-	{}
-};
+	template <typename View, typename Functor>
+	constexpr auto operator||(View&& view, transform<Functor> t)
+	{
+		return begin(view) & t ^ end(view);
+	}
 
-template <typename Iterator, typename Functor>
-constexpr auto operator&(Iterator i, transform<Functor> t)
-{
-	return transform_iterator(i, t.functor);
-}
-
-template <typename View, typename Functor>
-constexpr auto operator||(View&& view, transform<Functor> t)
-{
-	return begin(view) & t ^ end(view);
-}
-
-template <typename View, typename Functor>
-constexpr auto operator|(View&& view, transform<Functor> t)
-{
-	return (begin(view) & t) ^ (end(view) & t);
+	template <typename View, typename Functor>
+	constexpr auto operator|(View&& view, transform<Functor> t)
+	{
+		return (begin(view) & t) ^ (end(view) & t);
+	}
 }

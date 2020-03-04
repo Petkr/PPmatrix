@@ -2,40 +2,43 @@
 #include <utility>
 #include <type_traits>
 
-template <typename T>
-constexpr std::size_t number_width(T number)
+namespace PPmatrix
 {
-	if constexpr (std::is_floating_point_v<T>)
-		return 1;
-	else
+	template <typename T>
+	constexpr std::size_t number_width(T number)
 	{
-		std::size_t width = 0;
-
-		if constexpr (std::is_unsigned_v<T>)
-		{
-			if (number == 0)
-				++width;
-		}
+		if constexpr (std::is_floating_point_v<T>)
+			return 1;
 		else
 		{
-			if (number <= 0)
+			std::size_t width = 0;
+
+			if constexpr (std::is_unsigned_v<T>)
+			{
+				if (number == 0)
+					++width;
+			}
+			else
+			{
+				if (number <= 0)
+					++width;
+			}
+
+			while (number != 0)
+			{
+				number /= 10;
 				++width;
+			}
+
+			return width;
 		}
+	}
 
-		while (number != 0)
-		{
-			number /= 10;
-			++width;
-		}
-
-		return width;
-	}	
-}
-
-namespace functor
-{
-	constexpr auto number_width = [](auto&& x)
+	namespace functor
 	{
-		return ::number_width(x);
-	};
+		constexpr auto number_width = [](auto&& x)
+		{
+			return PPmatrix::number_width(x);
+		};
+	}
 }

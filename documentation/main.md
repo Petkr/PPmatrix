@@ -7,6 +7,7 @@ Dokumentácia zápočtového programu PPmatrix.
 * [multiply](#multiply)
 * [add](#add)
 * [transpose](#transpose)
+* [determinant](#determinant)
 
 ## multiply
 
@@ -19,7 +20,7 @@ constexpr void multiply(const MatrixViewA& A, const MatrixViewB& B, MatrixViewRe
 
 Násobí maticu `A` maticou `B`. Výsledok uloží do matice `result`.
 
-`flags::size` zapne kontrolu správnych rozmerov matíc
+`flags::size` zapne kontrolu správnych rozmerov matíc.
 
 (2)
 
@@ -39,7 +40,7 @@ constexpr auto& add(MatrixViewA& A, const MatrixViewB& B)
 
 Pripočíta k matici `A` maticu `B`. Referenciou vráti `A` po pričítaní.
 
-`flags::size` zapne kontrolu správnych rozmerov matíc
+`flags::size` zapne kontrolu správnych rozmerov matíc.
 
 ## transpose
 
@@ -100,3 +101,14 @@ Vráti determinant matice `matrix`.
 
 Ak je nastavené `flags::triangular`, volá `determinant<flags>(matrix, _)`.\
 Inak volá `determinant<flags>(matrix, is_triangular(matrix))`.
+
+## solve_linear_equations
+
+```
+template <flag::bitmask flags = flag::none, typename MatrixView, typename MatrixViewVector>
+constexpr std::make_signed_t<std::size_t> solve_linear_equations(MatrixView& M, MatrixViewVector& v)
+```
+
+Do `v` uloží `b`, ktoré je riešením rovnice `Mb = v`.
+
+`flag::height` zapne kontrolu rozmerov matíc.

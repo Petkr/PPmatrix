@@ -1,8 +1,11 @@
 #pragma once
 
-template <typename View, typename T>
-constexpr void fill(View&& view, const T& value)
+namespace PPmatrix
 {
-	for (auto&& x : view)
-		x = value;
+	template <typename View, typename T>
+	constexpr void fill(View&& view, const T& value)
+	{
+		for (auto&& x : view)
+			x = value;
+	}
 }
