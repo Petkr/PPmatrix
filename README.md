@@ -22,9 +22,9 @@ Nedefinuje `View` a `MatrixView` ako concept z C++20, hoci by to bolo možné.\
 Typ `T` spĺňa koncept `View`, ak sa na jeho objekt `V` dajú zavolať funkcie `begin(V)` a `end(V)`.\
 Typ `T` spĺňa koncept `MatrixView`, ak spĺňa `View` a na jeho objekt `M` sa dá zavolať funkcia `width(M)`.
 
-Implementuje generické algoritmy pracujúce s konceptom `View` (napr. [PPmatrix::copy](reference.md#copy)).
+Implementuje generické algoritmy pracujúce s konceptom `View` (napr. [`PPmatrix::copy`](reference.md#copy)).
 
-Umožňuje syntax z funkčného programovania aj s lazy evaluation ako v Ranges.
+Umožňuje syntax z funkčného programovania aj s lazy evaluation ako v Ranges:
 
 ```
 std::array<int, 6> a = { 1, 4, 6, 2, -5 };
@@ -71,9 +71,11 @@ Napríklad na všetkých wrapper iteratoroch implementuje iba `operator+=`
 a v [operators.hpp](PPmatrix/operators.hpp) implementuje `operator++`
 ako volanie `operator+=` s argumentom 1.
 
-Iterator, ktorý používa `augmented_matrix_view` je na iterator *obrovský*. Na 64-bit s internými `int*` má 56B.
+Iterator, ktorý používa `augmented_matrix_view` je na iterator *obrovský*.
+Na 64-bit s internými iteratormi `T*` má 56B.
 
-`augmented_matrix_view` má hlúpo implementovaný `operator+=`, ktorý pre `x += n` volá n-krát `++x`.
+`augmented_matrix_view` má hlúpo implementovaný `operator+=`,
+ktorý pre `x += n` volá n-krát `++x`.
 
 ## Licencia
 
