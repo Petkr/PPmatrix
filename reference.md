@@ -135,6 +135,8 @@ Upraví maticu `matrix` do (R)REF.
 
 ## copy
 
+(1)
+
 ```
 template <typename ViewFrom, typename ViewTo>
 constexpr void copy(const ViewFrom& from, ViewTo&& to)
@@ -142,4 +144,11 @@ constexpr void copy(const ViewFrom& from, ViewTo&& to)
 
 Nakopíruje `from` do `to` po prvkoch pomocou `operator=`.
 
-Počet volaní `operator=` je rovný `std::min(PPmatrix::size(from), PPmatrix::size(to)`
+Počet volaní `operator=` je rovný `std::min(PPmatrix::size(from), PPmatrix::size(to))`
+
+(2)
+
+```
+template <typename T, typename ViewTo>
+constexpr void copy(const std::initializer_list<T>& from, ViewTo&& to)
+```
