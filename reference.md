@@ -4,15 +4,17 @@ Referencia zápočtového programu PPmatrix.
 
 # Obsah
 
-* [Maticové operácie]
-* [multiply]
-* [add]
-* [transpose]
-* [determinant]
-* [solve_linear_equations]
-* [REF]
-* [copy]
-* [augmented_matrix_view]
+* [Maticové operácie](#maticové-operácie)
+  * [multiply](#multiply)
+  * [add](#add)
+  * [transpose](#transpose)
+  * [determinant](#determinant)
+  * [solve_linear_equations](#solve_linear_equations)
+  * [REF](#REF)
+* [Generické algoritmy](#generické-algoritmy)
+  * [copy](#copy)
+* uvidzime
+  * [augmented_matrix_view](#augmented_matrix_view)
 
 ## Maticové operácie
 
