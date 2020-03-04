@@ -46,7 +46,7 @@ namespace PPmatrix
 	template <typename View>
 	using view_base_t = iterator_base_t<begin_t<View>>;
 
-	namespace detail
+	namespace detai
 	{
 		template <typename T>
 		struct initializer_list_wrapper
@@ -60,6 +60,10 @@ namespace PPmatrix
 			constexpr auto end() const
 			{
 				return x.end();
+			}
+			constexpr auto size() const
+			{
+				return x.size();
 			}
 		};
 		template <typename T>

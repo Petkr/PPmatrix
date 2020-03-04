@@ -1,6 +1,6 @@
 ﻿# PPmatrix
 
-Dokumentácia zápočtového programu PPmatrix.
+Referencia zápočtového programu PPmatrix.
 
 ## Obsah
 
@@ -8,6 +8,9 @@ Dokumentácia zápočtového programu PPmatrix.
 * [add](#add)
 * [transpose](#transpose)
 * [determinant](#determinant)
+* [solve_linear_equations](#solve_linear_equations)
+* [REF](#REF)
+* [copy](#copy)
 
 ## multiply
 
@@ -112,3 +115,31 @@ constexpr std::make_signed_t<std::size_t> solve_linear_equations(MatrixView& M, 
 Do `v` uloží `b`, ktoré je riešením rovnice `Mb = v`.
 
 `flag::height` zapne kontrolu rozmerov matíc.
+
+## REF
+
+```
+template <bool reduced = false, bool calculate_determinant = false, bool calculate_rank = false, typename MatrixView>
+constexpr auto REF(MatrixView& matrix)
+```
+
+Upraví maticu `matrix` do (R)REF.
+
+`REF<false, d, r>` upraví do REF.\
+`REF<true, d, r>` upraví do RREF.
+
+`REF<rr, false, false>` má návratový typ `void`.\
+`REF<rr, true, false>` vracia determinant matice `matrix`.\
+`REF<rr, false, true>` vracia rank matice `matrix`.\
+`REF<rr, true, true>` vracia determinant a rank cez `std::pair`.
+
+## copy
+
+```
+template <typename ViewFrom, typename ViewTo>
+constexpr void copy(const ViewFrom& from, ViewTo&& to)
+```
+
+Nakopíruje `from` do `to` po prvkoch pomocou `operator=`.
+
+Počet volaní `operator=` je rovný `std::min(PPmatrix::size(from), PPmatrix::size(to)`

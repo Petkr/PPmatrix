@@ -1,6 +1,6 @@
 # PPmatrix
 
-Knižnica pre prácu s maticami.
+Knižnica pre prácu s maticami inšpirovaná a čiastočne využívajúca Ranges a Concepts z C++20.
 
 ## Operácie na maticiach
 
@@ -13,15 +13,18 @@ Knižnica pre prácu s maticami.
 * determinant
 * riešenie sústavy linárnych rovníc
 
-## Technické detaily
+## Ďalšie informácie
 
 Knižnica implementuje všetky maticové operácie ako nečlenské šablónové funkcie.
 
-Definuje "myšlienkový koncept" `MatrixView`, ktorý tieto funkcie používajú.
+Definuje "myšlienkové koncepty" `View` a `MatrixView`, ktoré tieto funkcie používajú.\
+Nedefinuje `View` a `MatrixView` ako concept z C++20, hoci by to bolo možné.\
+Typ `T` spĺňa koncept `View`, ak sa na jeho objekt `V` dajú zavolať funkcie `begin(V)` a `end(V)`.\
+Typ `T` spĺňa koncept `MatrixView`, ak spĺňa `View` a na jeho objekt `M` sa dá zavolať funkcia `width(M)`.
 
-Typ `T` spĺňa koncept `MatrixView`, ak sa na jeho objekt `M` dajú zavolať funkcie `begin(M)`, `end(M)` a `width(M).`
+Implementuje generické algoritmy pracujúce s konceptom `View` (napr. [PPmatrix::copy](reference#copy)).
 
-Nedefinuje `MatrixView` ako concept z C++20, hoci by to bolo možné.
+
 
 ## Príklad
 
@@ -48,6 +51,10 @@ výstup:
 |3|
 ```
 
-## Dokumentácia
+## Referencia
 
-[link](documentation/main.md)
+[reference](reference.md)
+
+## Licencia
+
+[MIT License](LICENSE)

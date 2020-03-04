@@ -10,7 +10,7 @@ namespace PPmatrix
 		T value;
 	public:
 		// can't use forwarding reference
-		// messes with copy/move constructors
+		// messes with implicit copy/move constructors
 		constexpr wrap_iterator(const T& value)
 			: value(value)
 		{}

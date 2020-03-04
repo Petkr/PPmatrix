@@ -724,7 +724,7 @@ namespace PPmatrix
 				out << '|';
 				auto i = begin(row);
 				auto a = end(row);
-				auto b = ::prev(a);
+				auto b = PPmatrix::prev(a);
 				for (; i != b; ++i)
 				{
 					printer(*i);
