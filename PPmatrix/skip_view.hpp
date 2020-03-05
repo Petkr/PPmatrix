@@ -37,10 +37,10 @@ namespace PPmatrix
 			return base_iterator != other.base_iterator;
 		}
 
-		constexpr auto& base()
+		/*constexpr auto& base()
 		{
 			return base_iterator;
-		}
+		}*/
 	};
 
 	struct skip
@@ -49,6 +49,12 @@ namespace PPmatrix
 		skip(std::size_t skip_length)
 			: skip_length(skip_length)
 		{}
+
+		template <typename View>
+		constexpr auto aligned_end(View&& view)
+		{
+			return end(view) + skip_length - PPmatrix::size(view) % skip_length;
+		}
 	};
 
 	template <typename Iterator>
@@ -59,11 +65,11 @@ namespace PPmatrix
 	template <typename View>
 	constexpr auto operator|(View&& view, skip s)
 	{
-		return begin(view) & s ^ end(view) & s;
+		return begin(view) & s ^ s.aligned_end(std::forward<View>(view)) & s;
 	}
 	template <typename View>
 	constexpr auto operator||(View&& view, skip s)
 	{
-		return begin(view) & s ^ end(view);
+		return begin(view) & s ^ s.aligned_end(std::forward<View>(view));
 	}
 }

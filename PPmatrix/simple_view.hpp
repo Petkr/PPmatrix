@@ -29,7 +29,7 @@ namespace PPmatrix
 		}
 	};
 	template <typename View>
-	simple_view(View&&)->simple_view<begin_t<View>, end_t<View>>;
+	simple_view(View&&) -> simple_view<begin_t<View>, end_t<View>>;
 
 	template <typename Iterator, typename Sentinel>
 	constexpr auto operator^(Iterator begin, Sentinel end)

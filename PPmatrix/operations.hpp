@@ -684,8 +684,10 @@ namespace PPmatrix
 			return determinant<flags>(matrix, is_triangular(matrix));
 	}
 	template <flag::bitmask flags = flag::none, typename MatrixView, typename MatrixViewVector>
-	constexpr std::make_signed_t<std::size_t> solve_linear_equations(MatrixView& M, MatrixViewVector& v)
+	constexpr auto solve_linear_equations(MatrixView& M, MatrixViewVector& v)
 	{
+		using return_t = std::make_signed_t<std::size_t>;
+
 		if constexpr (flag_set(flags, flag::height))
 			if (size(v) != height(matrix))
 				throw "invalid size of vector";
@@ -701,7 +703,7 @@ namespace PPmatrix
 				++sub_rank;
 
 		if (sub_rank < r)
-			return -1;
+			return return_t(-1);
 		else
 		{
 			if (r == w)
@@ -710,7 +712,7 @@ namespace PPmatrix
 				for (std::size_t i = 0; k != end(v); ++i, ++k)
 					*k = element(matrix, i, w) / element(matrix, i, i);
 			}
-			return w - r;
+			return return_t(w - r);
 		}
 	}
 
@@ -723,9 +725,7 @@ namespace PPmatrix
 			{
 				out << '|';
 				auto i = begin(row);
-				auto a = end(row);
-				auto b = PPmatrix::prev(a);
-				for (; i != b; ++i)
+				for (; i != PPmatrix::prev(end(row)); ++i)
 				{
 					printer(*i);
 					out << ' ';

@@ -4,7 +4,7 @@
 #include "dynamic_matrix.hpp"
 #include "static_matrix.hpp"
 #include "operations.hpp"
-
+#include <deque>
 int main()
 {
 	PPmatrix::dynamic_matrix<int> A(2, 2);

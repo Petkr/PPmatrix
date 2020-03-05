@@ -5,11 +5,11 @@
 
 namespace PPmatrix
 {
-	template <typename T>
+	template <typename T, template <typename> typename container = std::vector>
 	class dynamic_matrix
 	{
 		std::size_t width_;
-		std::vector<T> data_;
+		container<T> data_;
 
 	public:
 		dynamic_matrix(std::size_t height, std::size_t width)

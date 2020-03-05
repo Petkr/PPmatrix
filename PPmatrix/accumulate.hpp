@@ -14,6 +14,13 @@ namespace PPmatrix
 		return init;
 	}
 
+	template <typename T, typename BinaryFunction,
+		typename U = view_base_t<std::initializer_list<T>>>
+	constexpr auto accumulate(const std::initializer_list<T>& l, BinaryFunction f, U init = {})
+	{
+		return accumulate(detail::wrap_initializer_list(l), f, std::move(init));
+	}
+
 	template <typename BinaryFunction>
 	struct foldl
 	{
