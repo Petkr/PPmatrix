@@ -1,5 +1,5 @@
 #pragma once
-#include "utility.hpp"
+#include "view.hpp"
 
 namespace PPmatrix
 {
@@ -12,5 +12,20 @@ namespace PPmatrix
 			if (*i != *j)
 				return false;
 		return true;
+	}
+	template <typename T, typename View2>
+	constexpr auto equal(const std::initializer_list<T>& l, View2&& view2)
+	{
+		return equal(detail::wrap_initializer_list(l), std::forward<View2>(view2));
+	}
+	template <typename View1, typename T>
+	constexpr auto equal(View1&& view1, const std::initializer_list<T>& l)
+	{
+		return equal(std::forward<View1>(view1), detail::wrap_initializer_list(l));
+	}
+	template <typename T, typename U>
+	constexpr auto equal(const std::initializer_list<T>& l, const std::initializer_list<U>& m)
+	{
+		return equal(detail::wrap_initializer_list(l), detail::wrap_initializer_list(m));
 	}
 }

@@ -4,7 +4,7 @@
 namespace PPmatrix
 {
 	template <typename View>
-	constexpr auto max_element(const View& view)
+	constexpr auto max_element(View&& view)
 	{
 		auto i = begin(view);
 		auto max = i;
@@ -12,5 +12,10 @@ namespace PPmatrix
 			if (*max < *i)
 				max = i;
 		return max;
+	}
+	template <typename T>
+	constexpr auto max_element(const std::initializer_list<T>& l)
+	{
+		return max_element(detail::wrap_initializer_list(l));
 	}
 }

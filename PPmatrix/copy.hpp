@@ -13,9 +13,9 @@ namespace PPmatrix
 			});
 	}
 	template <typename T, typename ViewTo>
-	constexpr void copy(const std::initializer_list<T>& from, ViewTo&& to)
+	constexpr void copy(const std::initializer_list<T>& l, ViewTo&& to)
 	{
-		copy(detail::wrap_initializer_list(from), std::forward<ViewTo>(to));
+		copy(detail::wrap_initializer_list(l), std::forward<ViewTo>(to));
 	}
 
 	namespace functor

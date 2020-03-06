@@ -4,6 +4,7 @@
 #include "dynamic_matrix.hpp"
 #include "static_matrix.hpp"
 #include "operations.hpp"
+#include "equal.hpp"
 
 int main()
 {
@@ -29,6 +30,8 @@ int main()
 		0, 3, 9, 7, 3, 2 }, C);
 
 	std::cout << PPmatrix::determinant(C) << std::endl;
+
+	std::cout << std::boolalpha << PPmatrix::equal({ 1, 2, 3, 5 }, { 1, 2, 3, 4 });
 
 	return 0;
 }
