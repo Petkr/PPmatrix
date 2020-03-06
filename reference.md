@@ -485,7 +485,7 @@ template <typename T>
 constexpr auto max_element(const std::initializer_list<T>& l);
 ```
 
-Zhodné s [(1)]. Pozri [vysvetlenie](#generické-algoritmy).
+Zhodné s [(1)](#(1)). Pozri [vysvetlenie](#generické-algoritmy).
 
 ### swap_ranges
 
