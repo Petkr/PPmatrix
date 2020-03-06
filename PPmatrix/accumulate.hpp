@@ -5,7 +5,7 @@
 
 namespace PPmatrix
 {
-	template <typename View, typename BinaryFunction,
+	template <view View, typename BinaryFunction,
 		typename T = view_base_t<View>>
 	constexpr auto accumulate(View&& view, BinaryFunction f, T init = {})
 	{
@@ -30,7 +30,7 @@ namespace PPmatrix
 		{}
 	};
 
-	template <typename View, typename BinaryFunction>
+	template <view  View, typename BinaryFunction>
 	constexpr auto operator|(View&& view, foldl<BinaryFunction> f)
 	{
 		return accumulate(next(begin(view)) ^ end(view), f.f, *begin(view));

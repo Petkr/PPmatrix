@@ -3,7 +3,7 @@
 
 namespace PPmatrix
 {
-	template <typename View>
+	template <view View>
 	constexpr auto max_element(View&& view)
 	{
 		auto i = begin(view);

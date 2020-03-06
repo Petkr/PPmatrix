@@ -2,7 +2,7 @@
 #include <cstddef>
 #include <utility>
 #include <type_traits>
-#include "operators.hpp"
+#include "iterator.hpp"
 
 namespace PPmatrix
 {
@@ -20,6 +20,13 @@ namespace PPmatrix
 		return view.end();
 	}
 
+	template <typename View>
+	concept view = requires (View v)
+	{
+		begin(v);
+		end(v);
+	};
+
 	namespace detail
 	{
 		template <typename T>
@@ -28,8 +35,8 @@ namespace PPmatrix
 			t.size();
 		};
 	}
-	template <typename View>
-	constexpr std::size_t size(const View& view)
+	template <view View>
+	constexpr std::size_t size(View&& view)
 	{
 		if constexpr (detail::has_size<View>)
 			return view.size();

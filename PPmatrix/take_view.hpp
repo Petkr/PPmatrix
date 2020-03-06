@@ -22,17 +22,14 @@ namespace PPmatrix
 		constexpr auto& operator+=(std::size_t offset)
 		{
 			base_iterator += offset;
-			count -= offset;
+			if (offset <= count)
+				count -= offset;
 			return *this;
 		}
-		template <typename OtherIterator>
-		constexpr auto operator!=(OtherIterator) const
+		template <iterator OtherIterator>
+		constexpr auto operator!=(OtherIterator i) const
 		{
-			return *this != unbounded_sentinel;
-		}
-		constexpr auto operator!=(unbounded_sentinel_t) const
-		{
-			return count != 0;
+			return compare_iterator(base_iterator, i) && count != 0;
 		}
 	};
 
@@ -44,14 +41,30 @@ namespace PPmatrix
 		{}
 	};
 
+	template <iterator Iterator>
+	constexpr auto take_view(Iterator i, std::size_t n)
+	{
+		return take_iterator(i, n) ^ unbounded;
+	}
+	template <view View>
+	constexpr auto take_view(View&& v, std::size_t n)
+	{
+		return take_iterator(begin(v), n) ^ end(v);
+	}
+
 	template <typename Iterator>
 	constexpr auto operator&(Iterator i, take t)
 	{
 		return take_iterator(i, t.count);
 	}
-	template <typename View>
-	constexpr auto operator|(View&& view, take t)
+	template <view View>
+	constexpr auto operator||(View&& v, take t)
 	{
-		return begin(view) & t ^ unbounded_sentinel;
+		return take_view(begin(v), t.count);
+	}
+	template <view View>
+	constexpr auto operator|(View&& v, take t)
+	{
+		return take_view(std::forward<View>(v), t.count);
 	}
 }

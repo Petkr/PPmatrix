@@ -11,14 +11,14 @@ namespace PPmatrix
 		compressed_pair<Iterator, Sentinel> pair;
 
 	public:
-		template <typename View>
-		constexpr simple_matrix_view(View&& view, std::size_t width)
+		template <view View>
+		constexpr simple_matrix_view(View&& v, std::size_t width)
 			: width_(width)
-			, pair{ PPmatrix::begin(view), PPmatrix::end(view) }
+			, pair{ PPmatrix::begin(v), PPmatrix::end(v) }
 		{}
-		template <typename MatrixView>
-		constexpr simple_matrix_view(MatrixView&& view)
-			: simple_matrix_view(view, PPmatrix::width(view))
+		template <matrix_view MatrixView>
+		constexpr simple_matrix_view(MatrixView&& v)
+			: simple_matrix_view(v, PPmatrix::width(v))
 		{}
 		constexpr simple_matrix_view(Iterator begin, Sentinel end, std::size_t width)
 			: width_(width)

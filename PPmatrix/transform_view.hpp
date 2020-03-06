@@ -20,10 +20,15 @@ namespace PPmatrix
 			pair.first += offset;
 			return *this;
 		}
-		template <typename OtherIterator>
-		constexpr auto operator!=(OtherIterator other_iterator) const
+		constexpr auto& operator-=(std::size_t offset)
 		{
-			return other_iterator != pair.first;
+			pair.first -= offset;
+			return *this;
+		}
+		template <iterator OtherIterator>
+		constexpr auto operator!=(OtherIterator other) const
+		{
+			return compare_iterator(pair.first, other);
 		}
 	};
 
@@ -36,21 +41,27 @@ namespace PPmatrix
 		{}
 	};
 
-	template <typename Iterator, typename Functor>
+	template <view View, typename Functor>
+	constexpr auto transform_view(View&& v, Functor f)
+	{
+		return transform_iterator(begin(v), f) ^ transform_iterator(end(v), f);
+	}
+
+	template <iterator Iterator, typename Functor>
 	constexpr auto operator&(Iterator i, transform<Functor> t)
 	{
 		return transform_iterator(i, t.functor);
 	}
 
-	template <typename View, typename Functor>
-	constexpr auto operator||(View&& view, transform<Functor> t)
+	template <view View, typename Functor>
+	constexpr auto operator||(View&& v, transform<Functor> t)
 	{
-		return begin(view) & t ^ end(view);
+		return begin(v) & t ^ end(v);
 	}
 
-	template <typename View, typename Functor>
-	constexpr auto operator|(View&& view, transform<Functor> t)
+	template <view View, typename Functor>
+	constexpr auto operator|(View&& v, transform<Functor> t)
 	{
-		return (begin(view) & t) ^ (end(view) & t);
+		return transform_view(std::forward<View>(v), t.functor);
 	}
 }

@@ -135,28 +135,37 @@ namespace PPmatrix
 
 			return *this;
 		}
-		template <typename LeftIteratorOther, typename RightIteratorOther>
+		template <iterator LeftIteratorOther, iterator RightIteratorOther>
 		constexpr auto operator!=(const augmented_matrix_view_iterator<LeftIteratorOther, RightIteratorOther>& other) const
 		{
 			if (left_active == other.left_active)
 			{
 				if (left_active)
-					return left_iterator != other.left_iterator;
+					return compare_iterator(left_iterator, other.left_iterator);
 				else
-					return right_iterator != other.right_iterator;
+					return compare_iterator(right_iterator, other.right_iterator);
 			}
 			return true;
 		}
-		template <typename Iterator>
-		constexpr auto operator!=(const Iterator& other) const
+		template <iterator Iterator>
+		constexpr auto operator!=(Iterator other) const
 		{
 			if (left_active)
-				return left_iterator != other;
+			{
+				if constexpr (sentinel<Iterator, LeftIterator> || sentinel<LeftIterator, Iterator>)
+					return compare_iterator(left_iterator, other);
+			}
 			else
-				return right_iterator != other;
+			{
+				if constexpr (sentinel<Iterator, RightIterator> || sentinel<RightIterator, Iterator>)
+					return compare_iterator(right_iterator, other);
+			}
+			return true;
 		}
 	};
 
+	struct dont_check_heights_tag_t {};
+	constexpr dont_check_heights_tag_t dont_check_heights_tag{};
 
 	template <typename LeftMatrixView, typename RightMatrixView>
 	class augmented_matrix_view
@@ -165,8 +174,15 @@ namespace PPmatrix
 		RightMatrixView right;
 
 	public:
-		template <typename LeftMatrixViewAny, typename RightMatrixViewAny>
+		template <matrix_view LeftMatrixViewAny, matrix_view RightMatrixViewAny>
 		augmented_matrix_view(LeftMatrixViewAny&& left, RightMatrixViewAny&& right)
+			: augmented_matrix_view(std::forward<LeftMatrixViewAny>(left), std::forward<RightMatrixViewAny>(right), dont_check_heights_tag)
+		{
+			if (height(left) != height(right))
+				throw "incompatible heights";
+		}
+		template <matrix_view LeftMatrixViewAny, matrix_view RightMatrixViewAny>
+		augmented_matrix_view(LeftMatrixViewAny&& left, RightMatrixViewAny&& right, dont_check_heights_tag_t)
 			: left(simple_matrix_view(left))
 			, right(simple_matrix_view(right))
 		{}

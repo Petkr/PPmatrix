@@ -28,13 +28,10 @@ namespace PPmatrix
 			base_iterator -= offset * skip_length;
 			return *this;
 		}
-		constexpr auto operator!=(BaseIterator other)
+		template <iterator OtherIterator>
+		constexpr auto operator!=(OtherIterator other)
 		{
-			return base_iterator != other;
-		}
-		constexpr auto operator!=(skip_iterator other)
-		{
-			return base_iterator != other.base_iterator;
+			return compare_iterator(base_iterator, other);
 		}
 
 		constexpr auto& base()
@@ -63,13 +60,13 @@ namespace PPmatrix
 		return skip_iterator(i, s.skip_length);
 	}
 	template <typename View>
-	constexpr auto operator|(View&& view, skip s)
-	{
-		return begin(view) & s ^ s.aligned_end(std::forward<View>(view)) & s;
-	}
-	template <typename View>
 	constexpr auto operator||(View&& view, skip s)
 	{
 		return begin(view) & s ^ s.aligned_end(std::forward<View>(view));
+	}
+	template <typename View>
+	constexpr auto operator|(View&& view, skip s)
+	{
+		return begin(view) & s ^ s.aligned_end(std::forward<View>(view)) & s;
 	}
 }

@@ -5,6 +5,7 @@
 #include "static_matrix.hpp"
 #include "operations.hpp"
 #include "equal.hpp"
+#include "take_view.hpp"
 
 int main()
 {
@@ -16,7 +17,9 @@ int main()
 
 	PPmatrix::pretty_print(std::cout, PPmatrix::augmented_matrix_view(A, b));
 
-	PPmatrix::solve_linear_equations(A, b);
+	std::cout << "dimensions: " << PPmatrix::solve_linear_equations(A, b) << std::endl;
+
+	PPmatrix::pretty_print(std::cout, PPmatrix::augmented_matrix_view(A, b));
 
 	PPmatrix::pretty_print(std::cout, b);
 
@@ -30,8 +33,6 @@ int main()
 		0, 3, 9, 7, 3, 2 }, C);
 
 	std::cout << PPmatrix::determinant(C) << std::endl;
-
-	std::cout << std::boolalpha << PPmatrix::equal({ 1, 2, 3, 5 }, { 1, 2, 3, 4 });
-
+	
 	return 0;
 }

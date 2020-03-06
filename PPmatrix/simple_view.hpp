@@ -6,15 +6,15 @@
 
 namespace PPmatrix
 {
-	template <typename Iterator, typename Sentinel = Iterator>
+	template <typename Iterator, typename Sentinel>
 	class simple_view
 	{
 		compressed_pair<Iterator, Sentinel> pair;
 
 	public:
-		template <typename View>
-		constexpr simple_view(View&& view)
-			: pair{ PPmatrix::begin(view), PPmatrix::end(view) }
+		template <view View>
+		constexpr simple_view(View&& v)
+			: pair{ PPmatrix::begin(v), PPmatrix::end(v) }
 		{}
 		constexpr simple_view(Iterator begin, Sentinel end)
 			: pair{ begin, end }

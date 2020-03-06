@@ -3,7 +3,7 @@
 
 namespace PPmatrix
 {
-	template <typename View, typename UnaryPredicate>
+	template <view View, typename UnaryPredicate>
 	constexpr auto find(View&& view, UnaryPredicate p)
 	{
 		auto i = begin(view);

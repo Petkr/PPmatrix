@@ -23,6 +23,10 @@ namespace PPmatrix
 		{
 			return *this;
 		}
+		constexpr auto& operator-=(std::size_t)
+		{
+			return *this;
+		}
 	};
 
 	template <typename T>

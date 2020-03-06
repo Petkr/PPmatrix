@@ -180,13 +180,10 @@ namespace PPmatrix
 				end_ -= count;
 				return *this;
 			}
-			constexpr auto operator!=(Iterator other) const
+			template <iterator OtherIterator>
+			constexpr auto operator!=(OtherIterator other) const
 			{
-				return begin_ != other;
-			}
-			constexpr auto operator!=(column_sentinel other) const
-			{
-				return begin_ != other.begin_;
+				return compare_iterator(begin_, other);
 			}
 		};
 		template <typename MatrixView>
@@ -495,28 +492,6 @@ namespace PPmatrix
 
 		zip(row_sentinel(matrix, i2), row_sentinel(matrix, i1),
 			[&scalar](auto&& x, auto&& y) { x += scalar * y; });
-	}
-
-	template <typename ResizableMatrixView>
-	constexpr void resize(ResizableMatrixView& matrix, std::size_t size, std::size_t width)
-	{
-		matrix.resize(size, width);
-	}
-	template <typename ResizableMatrixView>
-	void append_rows(ResizableMatrixView& matrix, std::size_t count)
-	{
-		resize(matrix, size(matrix) + count * width(matrix), width(matrix));
-	}
-	template <typename ResizableMatrixView>
-	void append_columns(ResizableMatrixView& matrix, std::size_t count)
-	{
-		auto old_width = width(matrix);
-
-		resize(matrix, size(matrix) + count * height(matrix), width(matrix) + count);
-
-		for (std::size_t i = height(matrix) - 1; i != 0; --i)
-			for (std::size_t j = width(matrix) - 1; j != -1; --j)
-				element(matrix, i, j) = element(matrix, i, j, old_width);
 	}
 
 	template <bool reduced = false, bool calculate_determinant = false, bool calculate_rank = false, typename MatrixView>

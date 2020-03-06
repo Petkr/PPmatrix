@@ -3,8 +3,8 @@
 
 namespace PPmatrix
 {
-	template <typename ViewFrom, typename ViewTo>
-	constexpr void copy(const ViewFrom& from, ViewTo&& to)
+	template <view ViewFrom, view ViewTo>
+	constexpr void copy(ViewFrom&& from, ViewTo&& to)
 	{
 		zip(from, std::forward<ViewTo>(to),
 			[](const auto& from, auto& to)
@@ -12,7 +12,7 @@ namespace PPmatrix
 				to = from;
 			});
 	}
-	template <typename T, typename ViewTo>
+	template <typename T, view ViewTo>
 	constexpr void copy(const std::initializer_list<T>& l, ViewTo&& to)
 	{
 		copy(detail::wrap_initializer_list(l), std::forward<ViewTo>(to));
