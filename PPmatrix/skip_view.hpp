@@ -37,10 +37,10 @@ namespace PPmatrix
 			return base_iterator != other.base_iterator;
 		}
 
-		/*constexpr auto& base()
+		constexpr auto& base()
 		{
 			return base_iterator;
-		}*/
+		}
 	};
 
 	struct skip

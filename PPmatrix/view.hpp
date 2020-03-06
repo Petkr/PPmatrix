@@ -25,7 +25,7 @@ namespace PPmatrix
 		template <typename T>
 		concept has_size = requires (const T t)
 		{
-			{ t.size() }->std::size_t;
+			t.size();
 		};
 	}
 	template <typename View>

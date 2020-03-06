@@ -89,7 +89,7 @@ namespace PPmatrix
 			{
 				--left_iterator;
 				--left_pos;
-				if (left_pos == -1)
+				if (left_pos == std::size_t(-1))
 				{
 					right_iterator -= right_width;
 					left_pos = left_width - 1;
@@ -100,7 +100,7 @@ namespace PPmatrix
 			{
 				--right_iterator;
 				--right_pos;
-				if (right_pos == -1)
+				if (right_pos == std::size_t(-1))
 				{
 					right_pos = right_width - 1;
 					left_active = true;

@@ -85,6 +85,12 @@ namespace PPmatrix
 			simplify();
 			return *this;
 		}
+		constexpr auto operator*(rational other) const
+		{
+			auto copy = *this;
+			copy *= other;
+			return copy;
+		}
 		constexpr void invert()
 		{
 			std::swap(num, den);
@@ -96,6 +102,12 @@ namespace PPmatrix
 		constexpr auto& operator/=(rational other)
 		{
 			return *this *= other.inverse();
+		}
+		constexpr auto operator/(rational other) const
+		{
+			auto copy = *this;
+			copy /= other;
+			return copy;
 		}
 		constexpr bool is_integral() const
 		{

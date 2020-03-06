@@ -14,7 +14,7 @@ namespace PPmatrix
 	public:
 		template <typename View>
 		constexpr simple_view(View&& view)
-			: pair{ ::begin(view), ::end(view) }
+			: pair{ PPmatrix::begin(view), PPmatrix::end(view) }
 		{}
 		constexpr simple_view(Iterator begin, Sentinel end)
 			: pair{ begin, end }

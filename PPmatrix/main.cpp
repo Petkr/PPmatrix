@@ -4,7 +4,7 @@
 #include "dynamic_matrix.hpp"
 #include "static_matrix.hpp"
 #include "operations.hpp"
-#include <deque>
+
 int main()
 {
 	PPmatrix::dynamic_matrix<int> A(2, 2);
@@ -18,6 +18,17 @@ int main()
 	PPmatrix::solve_linear_equations(A, b);
 
 	PPmatrix::pretty_print(std::cout, b);
+
+	PPmatrix::static_matrix<PPmatrix::Q, 36> C(6);
+	PPmatrix::copy({
+		1, 5, 9, 0, 4, 0,
+		9, 6, 7, 3, 6, 8,
+		0, 8, 3, 2, 4, 7,
+		4, 0, 1, 5, 6, 1,
+		7, 8, 7, 6, 3, 9,
+		0, 3, 9, 7, 3, 2 }, C);
+
+	std::cout << PPmatrix::determinant(C) << std::endl;
 
 	return 0;
 }

@@ -7,7 +7,7 @@ namespace PPmatrix
 {
 	template <typename View, typename BinaryFunction,
 		typename T = view_base_t<View>>
-	constexpr auto accumulate(const View& view, BinaryFunction f, T init = {})
+	constexpr auto accumulate(View&& view, BinaryFunction f, T init = {})
 	{
 		for (const auto& x : view)
 			init = f(std::move(init), x);

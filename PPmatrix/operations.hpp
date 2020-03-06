@@ -19,7 +19,6 @@
 #include "copy.hpp"
 #include "functor.hpp"
 #include "static_view.hpp"
-#include "execute.hpp"
 #include "prev.hpp"
 #include "augmented_matrix_view.hpp"
 #include "matrix_view.hpp"
@@ -95,7 +94,7 @@ namespace PPmatrix
 			}
 		};
 		template <typename MatrixView>
-		row(MatrixView&&, std::size_t)->row<begin_t<MatrixView>>;
+		row(MatrixView&&, std::size_t) -> row<begin_t<MatrixView>>;
 
 		template <typename Iterator>
 		class column
@@ -107,8 +106,8 @@ namespace PPmatrix
 			template <typename MatrixView>
 			column(MatrixView&& matrix, std::size_t index)
 				: width_(width(matrix))
-				, begin_(::begin(matrix) + index)
-				, end_(::end(matrix) + index)
+				, begin_(PPmatrix::begin(matrix) + index)
+				, end_(PPmatrix::end(matrix) + index)
 			{}
 			constexpr auto begin() const
 			{
@@ -144,7 +143,7 @@ namespace PPmatrix
 			}
 		};
 		template <typename MatrixView>
-		column(MatrixView&&, std::size_t)->column<begin_t<MatrixView>>;
+		column(MatrixView&&, std::size_t) -> column<begin_t<MatrixView>>;
 
 		template <typename Iterator>
 		class column_sentinel
@@ -154,8 +153,8 @@ namespace PPmatrix
 		public:
 			template <typename MatrixView>
 			column_sentinel(MatrixView&& matrix, std::size_t index)
-				: begin_((::begin(matrix) + index)& skip(width(matrix)))
-				, end_(::end(matrix) + index)
+				: begin_((PPmatrix::begin(matrix) + index) & skip(width(matrix)))
+				, end_(PPmatrix::end(matrix) + index)
 			{}
 			constexpr auto begin() const
 			{
@@ -689,7 +688,7 @@ namespace PPmatrix
 		using return_t = std::make_signed_t<std::size_t>;
 
 		if constexpr (flag_set(flags, flag::height))
-			if (size(v) != height(matrix))
+			if (size(v) != height(M))
 				throw "invalid size of vector";
 
 		auto w = width(M);

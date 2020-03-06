@@ -22,7 +22,7 @@ namespace PPmatrix
 	{
 		constexpr auto copy = []<typename ViewTo>(const auto& from, ViewTo&& to)
 		{
-			copy(from, std::forward<ViewTo>(to));
+			PPmatrix::copy(from, std::forward<ViewTo>(to));
 		};
 	}
 }
