@@ -171,7 +171,7 @@ Upraví maticu `matrix` do (R)REF.
 
 ## Generické algoritmy
 
-Algoritmy, ktoré akceptujú `const T&` argument
+Algoritmy, ktoré akceptujú `View` na konštantné prvky
 majú navyše overloady pre `std::initializer_list`.
 Keďže výraz `{1, 2, 3}` nemá v C++ typ,
 kompilátor nedokáže vydedukovať template parameter.
@@ -333,4 +333,174 @@ class dynamic_matrix
 	auto width() const;
 	void resize(std::size_t size, std::size_t width);
 };
+```
+
+### equal
+
+(1)
+
+```
+template <
+	typename View1,
+	typename View2>
+constexpr auto equal(View1&& view1, View2&& view2);
+```
+
+Určí, či sú `view1` a `view2` zhodné po prvkoch podľa `operator==`.
+
+Z oboch `View` porovnáva iba prvých `std::min(PPmatrix::size(view1), PPmatrix::size(view2))` prvkov.
+
+(2)
+
+```
+template <
+	typename T,
+	typename View2>
+constexpr auto equal(const std::initializer_list<T>& l, View2&& view2);
+```
+
+Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
+
+(3)
+
+```
+template <
+	typename View1,
+	typename T>
+constexpr auto equal(View1&& view1, const std::initializer_list<T>& l);
+```
+
+Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
+
+(4)
+
+```
+template <
+	typename T,
+	typename U>
+constexpr auto equal(const std::initializer_list<T>& l, const std::initializer_list<U>& m);
+```
+
+Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
+
+### fill
+
+```
+template <
+	typename View,
+	typename T>
+constexpr void fill(View&& view, const T& value);
+```
+
+### find
+
+(1)
+
+```
+template <
+	typename View,
+	typename UnaryPredicate>
+constexpr auto find(View&& view, UnaryPredicate p);
+```
+
+Ak existuje element `x` v `view`, pre ktorý `p(x)` vráti `true`, vráti iterator na prvý taký.\
+Inak vráti iterator rovný `PPmatrix::end(view)`.
+
+(2)
+
+```
+template <
+	typename T,
+	typename UnaryPredicate>
+constexpr auto find(const std::initializer_list<T>& l, UnaryPredicate p);
+```
+
+Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
+
+### inner_product
+
+(1)
+
+```
+template <
+	typename View1,
+	typename View2,
+	typename T = detail::accumulator_t<View1, View2>>
+constexpr auto inner_product(const View1& view1, const View2& view2, T init = {});
+```
+
+Vráti súčet `init` a súčinov prvkov `view1` a `view2`.
+
+(2)
+
+```
+template <
+	typename T,
+	typename View2,
+	typename U = detail::accumulator_t<std::initializer_list<T>, View2>>
+constexpr auto inner_product(const std::initializer_list<T>& l, const View2& view2, U init = {});
+```
+
+Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
+
+(3)
+
+```
+template <
+	typename View1,
+	typename T,
+	typename U = detail::accumulator_t<View1, std::initializer_list<T>>>
+constexpr auto inner_product(const View1& view1, const std::initializer_list<T>& l, U init = {});
+```
+
+Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
+
+(4)
+
+```
+template <
+	typename T,
+	typename U,
+	typename V = detail::accumulator_t<std::initializer_list<T>, std::initializer_list<U>>>
+constexpr auto inner_product(const std::initializer_list<T>& l, const std::initializer_list<U>& m, V init = {});
+```
+
+Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
+
+### max_element
+
+###### (1)
+
+```
+template <typename View>
+constexpr auto max_element(View&& view);
+```
+
+Vráti iterator na najväčší prvok vo `view`.
+
+###### (2)
+
+```
+template <typename T>
+constexpr auto max_element(const std::initializer_list<T>& l);
+```
+
+Zhodné s [(1)]. Pozri [vysvetlenie](#generické-algoritmy).
+
+### swap_ranges
+
+```
+template <
+	typename View,
+	typename T>
+constexpr void fill(View&& view, const T& value);
+```
+
+### zip
+
+```
+template <
+	typename View,
+	typename T>
+constexpr void fill(View&& view, const T& value);
 ```
