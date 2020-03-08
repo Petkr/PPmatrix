@@ -42,13 +42,13 @@ namespace PPmatrix
 	};
 
 	template <typename T, typename U>
-	constexpr auto wrap_view(T&& begin, U&& end)
+	constexpr view wrap_view(T&& begin, U&& end)
 	{
 		return wrap_iterator(std::forward<T>(begin)) ^ wrap_iterator(std::forward<U>(end));
 	}
 
 	template <typename T>
-	constexpr auto wrap_view(T&& begin)
+	constexpr view wrap_view(T&& begin)
 	{
 		return wrap_iterator(std::forward<T>(begin)) ^ unbounded_sentinel;
 	}

@@ -3,7 +3,7 @@
 
 namespace PPmatrix
 {
-	template <typename BaseIterator, typename Transform>
+	template <iterator BaseIterator, typename Transform>
 	class transform_iterator
 	{
 		compressed_pair<BaseIterator, Transform> pair;
@@ -26,7 +26,7 @@ namespace PPmatrix
 			return *this;
 		}
 		template <iterator OtherIterator>
-		constexpr auto operator!=(OtherIterator other) const
+		constexpr bool operator!=(OtherIterator other) const
 		{
 			return compare_iterator(pair.first, other);
 		}
@@ -42,25 +42,25 @@ namespace PPmatrix
 	};
 
 	template <view View, typename Functor>
-	constexpr auto transform_view(View&& v, Functor f)
+	constexpr view transform_view(View&& v, Functor f)
 	{
 		return transform_iterator(begin(v), f) ^ transform_iterator(end(v), f);
 	}
 
 	template <iterator Iterator, typename Functor>
-	constexpr auto operator&(Iterator i, transform<Functor> t)
+	constexpr iterator operator&(Iterator i, transform<Functor> t)
 	{
 		return transform_iterator(i, t.functor);
 	}
 
 	template <view View, typename Functor>
-	constexpr auto operator||(View&& v, transform<Functor> t)
+	constexpr view operator||(View&& v, transform<Functor> t)
 	{
 		return begin(v) & t ^ end(v);
 	}
 
 	template <view View, typename Functor>
-	constexpr auto operator|(View&& v, transform<Functor> t)
+	constexpr view operator|(View&& v, transform<Functor> t)
 	{
 		return transform_view(std::forward<View>(v), t.functor);
 	}

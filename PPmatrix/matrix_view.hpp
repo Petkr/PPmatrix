@@ -8,7 +8,7 @@ namespace PPmatrix
 		template <typename T>
 		concept has_width = requires (const T t)
 		{
-			t.width();
+			{ t.width() } -> std::size_t;
 		};
 	}
 	template <view MatrixView>
@@ -23,7 +23,7 @@ namespace PPmatrix
 	concept matrix_view = view<MatrixView> &&
 		requires (const MatrixView mv)
 		{
-			width(mv);
+			{ width(mv) } -> std::size_t;
 		};
 
 	template <matrix_view MatrixView>

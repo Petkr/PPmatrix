@@ -30,7 +30,7 @@ namespace PPmatrix
 	};
 
 	template <typename T>
-	constexpr auto static_view(T&& value)
+	constexpr view static_view(T&& value)
 	{
 		return static_iterator(std::forward<T>(value)) ^ unbounded;
 	}

@@ -5,7 +5,7 @@
 
 namespace PPmatrix
 {
-	template <typename LeftIterator, typename RightIterator>
+	template <iterator LeftIterator, iterator RightIterator>
 	class augmented_matrix_view_iterator
 	{
 		std::size_t left_pos;
@@ -51,7 +51,7 @@ namespace PPmatrix
 			, left_active(true)
 		{}
 
-		constexpr auto& operator*()
+		constexpr decltype(auto) operator*()
 		{
 			if (left_active)
 				return *left_iterator;
@@ -136,7 +136,7 @@ namespace PPmatrix
 			return *this;
 		}
 		template <iterator LeftIteratorOther, iterator RightIteratorOther>
-		constexpr auto operator!=(const augmented_matrix_view_iterator<LeftIteratorOther, RightIteratorOther>& other) const
+		constexpr bool operator!=(const augmented_matrix_view_iterator<LeftIteratorOther, RightIteratorOther>& other) const
 		{
 			if (left_active == other.left_active)
 			{
@@ -148,7 +148,7 @@ namespace PPmatrix
 			return true;
 		}
 		template <iterator Iterator>
-		constexpr auto operator!=(Iterator other) const
+		constexpr bool operator!=(Iterator other) const
 		{
 			if (left_active)
 			{
@@ -167,7 +167,7 @@ namespace PPmatrix
 	struct dont_check_heights_tag_t {};
 	constexpr dont_check_heights_tag_t dont_check_heights_tag{};
 
-	template <typename LeftMatrixView, typename RightMatrixView>
+	template <matrix_view LeftMatrixView, matrix_view RightMatrixView>
 	class augmented_matrix_view
 	{
 		LeftMatrixView left;
@@ -187,24 +187,24 @@ namespace PPmatrix
 			, right(simple_matrix_view(right))
 		{}
 
-		auto begin() const
+		iterator begin() const
 		{
 			return augmented_matrix_view_iterator(PPmatrix::begin(left), PPmatrix::width(left), PPmatrix::begin(right), PPmatrix::width(right));
 		}
-		auto end() const
+		iterator end() const
 		{
 			return augmented_matrix_view_iterator(PPmatrix::end(left), PPmatrix::width(left), PPmatrix::end(right), PPmatrix::width(right));
 		}
-		auto width() const
+		std::size_t width() const
 		{
 			return PPmatrix::width(left) + PPmatrix::width(right);
 		}
-		auto size() const
+		std::size_t size() const
 		{
 			return PPmatrix::size(left) + PPmatrix::size(right);
 		}
 	};
-	template <typename LeftMatrixViewAny, typename RightMatrixViewAny>
+	template <matrix_view LeftMatrixViewAny, matrix_view RightMatrixViewAny>
 	augmented_matrix_view(LeftMatrixViewAny&& left, RightMatrixViewAny&& right)
 		->augmented_matrix_view<
 		decltype(simple_matrix_view(left)),

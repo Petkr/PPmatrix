@@ -11,33 +11,33 @@ namespace PPmatrix
 		{}
 	};
 
-	template <typename View>
-	constexpr auto operator<<(View&& view, shift s)
+	template <view View>
+	constexpr view operator<<(View&& view, shift s)
 	{
 		return begin(view) - s.count ^ end(view) - s.count;
 	}
-	template <typename View>
-	constexpr auto operator<<(shift s, View&& view)
+	template <view View>
+	constexpr view operator<<(shift s, View&& view)
 	{
 		return std::forward<View>(view) << s;
 	}
-	template <typename View>
-	constexpr auto operator<(View&& view, shift s)
+	template <view View>
+	constexpr view operator<(View&& view, shift s)
 	{
 		return begin(view) ^ end(view) - s.count;
 	}
-	template <typename View>
-	constexpr auto operator<(shift s, View&& view)
+	template <view View>
+	constexpr view operator<(shift s, View&& view)
 	{
 		return begin(view) - s.count ^ end(view);
 	}
-	template <typename View>
-	constexpr auto operator>(View&& view, shift s)
+	template <view View>
+	constexpr view operator>(View&& view, shift s)
 	{
 		return begin(view) ^ end(view) + s.count;
 	}
-	template <typename View>
-	constexpr auto operator>(shift s, View&& view)
+	template <view View>
+	constexpr view operator>(shift s, View&& view)
 	{
 		return begin(view) + s.count ^ end(view);
 	}

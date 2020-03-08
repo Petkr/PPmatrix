@@ -4,7 +4,7 @@
 
 namespace PPmatrix
 {
-	template <typename BaseIterator>
+	template <iterator BaseIterator>
 	class skip_iterator
 	{
 		BaseIterator base_iterator;
@@ -29,7 +29,7 @@ namespace PPmatrix
 			return *this;
 		}
 		template <iterator OtherIterator>
-		constexpr auto operator!=(OtherIterator other)
+		constexpr bool operator!=(OtherIterator other)
 		{
 			return compare_iterator(base_iterator, other);
 		}
@@ -47,25 +47,25 @@ namespace PPmatrix
 			: skip_length(skip_length)
 		{}
 
-		template <typename View>
-		constexpr auto aligned_end(View&& view)
+		template <view View>
+		constexpr iterator aligned_end(View&& view)
 		{
 			return end(view) + skip_length - PPmatrix::size(view) % skip_length;
 		}
 	};
 
-	template <typename Iterator>
-	constexpr auto operator&(Iterator i, skip s)
+	template <iterator Iterator>
+	constexpr iterator operator&(Iterator i, skip s)
 	{
 		return skip_iterator(i, s.skip_length);
 	}
-	template <typename View>
-	constexpr auto operator||(View&& view, skip s)
+	template <view View>
+	constexpr view operator||(View&& view, skip s)
 	{
 		return begin(view) & s ^ s.aligned_end(std::forward<View>(view));
 	}
-	template <typename View>
-	constexpr auto operator|(View&& view, skip s)
+	template <view View>
+	constexpr view operator|(View&& view, skip s)
 	{
 		return begin(view) & s ^ s.aligned_end(std::forward<View>(view)) & s;
 	}

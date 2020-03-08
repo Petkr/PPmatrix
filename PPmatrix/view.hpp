@@ -8,14 +8,14 @@ namespace PPmatrix
 {
 	template <typename View>
 	requires requires (View v) { v.begin(); }
-	constexpr auto begin(View&& view)
+	constexpr iterator begin(View&& view)
 	{
 		return view.begin();
 	}
 
 	template <typename View>
 	requires requires (View v) { v.end(); }
-	constexpr auto end(View&& view)
+	constexpr iterator end(View&& view)
 	{
 		return view.end();
 	}
@@ -23,8 +23,8 @@ namespace PPmatrix
 	template <typename View>
 	concept view = requires (View v)
 	{
-		begin(v);
-		end(v);
+		{ begin(v) } -> iterator;
+		{ end(v) } -> iterator;
 	};
 
 	namespace detail
@@ -32,7 +32,7 @@ namespace PPmatrix
 		template <typename T>
 		concept has_size = requires (const T t)
 		{
-			t.size();
+			{ t.size() } -> std::size_t;
 		};
 	}
 	template <view View>
@@ -44,15 +44,15 @@ namespace PPmatrix
 			return end(view) - begin(view);
 	}
 
-	template <typename View>
+	template <view View>
 	using begin_t = decltype(begin(std::declval<View>()));
-	template <typename View>
+	template <view View>
 	using end_t = decltype(end(std::declval<View>()));
-	template <typename Iterator>
+	template <iterator Iterator>
 	using iterator_base_t = std::decay_t<decltype(*std::declval<Iterator>())>;
-	template <typename View>
+	template <view View>
 	using view_base_t = iterator_base_t<begin_t<View>>;
-
+	
 	namespace detail
 	{
 		template <typename T>

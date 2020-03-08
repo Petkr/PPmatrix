@@ -9,6 +9,11 @@
 
 int main()
 {
+	std::cout << PPmatrix::view<std::array<int, 6>> << std::endl;
+	std::cout << PPmatrix::view<std::vector<int>> << std::endl;
+	std::cout << PPmatrix::view<PPmatrix::static_matrix<int, 2>> << std::endl;
+	std::cout << PPmatrix::view<PPmatrix::dynamic_matrix<int>> << std::endl;
+
 	PPmatrix::dynamic_matrix<int> A(2, 2);
 	PPmatrix::copy({ 1, 2, 1, 3 }, A);
 

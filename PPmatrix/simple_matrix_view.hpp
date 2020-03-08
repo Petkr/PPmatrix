@@ -4,7 +4,7 @@
 
 namespace PPmatrix
 {
-	template <typename Iterator, typename Sentinel>
+	template <iterator Iterator, sentinel<Iterator> Sentinel>
 	class simple_matrix_view
 	{
 		std::size_t width_;
@@ -24,26 +24,26 @@ namespace PPmatrix
 			: width_(width)
 			, pair{ begin, end }
 		{}
-		constexpr auto begin() const
+		constexpr iterator begin() const
 		{
 			return pair.first;
 		}
-		constexpr auto end() const
+		constexpr iterator end() const
 		{
 			return pair.second;
 		}
-		constexpr auto width() const
+		constexpr std::size_t width() const
 		{
 			return width_;
 		}
 
-		constexpr auto set_width(std::size_t width)
+		constexpr void set_width(std::size_t width)
 		{
 			width_ = width;
 		}
 	};
-	template <typename MatrixView>
-	simple_matrix_view(MatrixView&&)->simple_matrix_view<begin_t<MatrixView>, end_t<MatrixView>>;
-	template <typename View>
-	simple_matrix_view(View&&, std::size_t)->simple_matrix_view<begin_t<View>, end_t<View>>;
+	template <matrix_view MatrixView>
+	simple_matrix_view(MatrixView&&) -> simple_matrix_view<begin_t<MatrixView>, end_t<MatrixView>>;
+	template <view View>
+	simple_matrix_view(View&&, std::size_t) -> simple_matrix_view<begin_t<View>, end_t<View>>;
 }

@@ -9,9 +9,11 @@ namespace PPmatrix
 	constexpr resize_columns_tag_t resize_columns_tag{};
 
 	template <typename T, template <typename> typename container = std::vector>
-	requires requires (container<T> c, std::size_t new_size)
+	requires requires (container<T> c, std::size_t size)
 	{
-		c.resize(new_size);
+		requires view<container<T>>;
+		container<T>(size);
+		c.resize(size);
 	}
 	class dynamic_matrix
 	{
@@ -24,23 +26,23 @@ namespace PPmatrix
 			, data_(width_* height)
 		{}
 
-		auto begin()
+		iterator begin()
 		{
 			return PPmatrix::begin(data_);
 		}
-		auto begin() const
+		iterator begin() const
 		{
 			return PPmatrix::begin(data_);
 		}
-		auto end()
+		iterator end()
 		{
 			return PPmatrix::end(data_);
 		}
-		auto end() const
+		iterator end() const
 		{
 			return PPmatrix::end(data_);
 		}
-		auto width() const
+		std::size_t width() const
 		{
 			return width_;
 		}
@@ -53,7 +55,6 @@ namespace PPmatrix
 			auto old_height = height(*this);
 			width_ = new_width;
 			data_.resize(width_ * old_height);
-
 		}
 	};
 }

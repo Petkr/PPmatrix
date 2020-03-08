@@ -16,23 +16,23 @@ namespace PPmatrix
 			, data_()
 		{}
 
-		constexpr auto begin()
+		constexpr iterator begin()
 		{
 			return PPmatrix::begin(data_);
 		}
-		constexpr auto begin() const
+		constexpr iterator begin() const
 		{
 			return PPmatrix::begin(data_);
 		}
-		constexpr auto end()
+		constexpr iterator end()
 		{
 			return PPmatrix::end(data_);
 		}
-		constexpr auto end() const
+		constexpr iterator end() const
 		{
 			return PPmatrix::end(data_);
 		}
-		constexpr auto width() const
+		constexpr std::size_t width() const
 		{
 			return width_;
 		}

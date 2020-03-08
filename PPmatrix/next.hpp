@@ -1,9 +1,10 @@
 #pragma once
+#include "iterator.hpp"
 
 namespace PPmatrix
 {
-	template <typename ForwardIterator>
-	constexpr auto next(ForwardIterator i)
+	template <iterator ForwardIterator>
+	constexpr ForwardIterator next(ForwardIterator i)
 	{
 		return ++i;
 	}

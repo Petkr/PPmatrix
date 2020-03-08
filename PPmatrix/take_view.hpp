@@ -4,7 +4,7 @@
 
 namespace PPmatrix
 {
-	template <typename BaseIterator>
+	template <iterator BaseIterator>
 	class take_iterator
 	{
 		BaseIterator base_iterator;
@@ -27,7 +27,7 @@ namespace PPmatrix
 			return *this;
 		}
 		template <iterator OtherIterator>
-		constexpr auto operator!=(OtherIterator i) const
+		constexpr bool operator!=(OtherIterator i) const
 		{
 			return compare_iterator(base_iterator, i) && count != 0;
 		}
@@ -42,28 +42,28 @@ namespace PPmatrix
 	};
 
 	template <iterator Iterator>
-	constexpr auto take_view(Iterator i, std::size_t n)
+	constexpr view take_view(Iterator i, std::size_t n)
 	{
 		return take_iterator(i, n) ^ unbounded;
 	}
 	template <view View>
-	constexpr auto take_view(View&& v, std::size_t n)
+	constexpr view take_view(View&& v, std::size_t n)
 	{
 		return take_iterator(begin(v), n) ^ end(v);
 	}
 
 	template <typename Iterator>
-	constexpr auto operator&(Iterator i, take t)
+	constexpr iterator operator&(Iterator i, take t)
 	{
 		return take_iterator(i, t.count);
 	}
 	template <view View>
-	constexpr auto operator||(View&& v, take t)
+	constexpr view operator||(View&& v, take t)
 	{
 		return take_view(begin(v), t.count);
 	}
 	template <view View>
-	constexpr auto operator|(View&& v, take t)
+	constexpr view operator|(View&& v, take t)
 	{
 		return take_view(std::forward<View>(v), t.count);
 	}
