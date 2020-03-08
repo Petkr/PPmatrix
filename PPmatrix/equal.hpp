@@ -4,7 +4,7 @@
 namespace PPmatrix
 {
 	template <view View1, view View2>
-	constexpr auto equal(View1&& view1, View2&& view2)
+	constexpr bool equal(View1&& view1, View2&& view2)
 	{
 		auto i = begin(view1);
 		auto j = begin(view2);
@@ -14,17 +14,17 @@ namespace PPmatrix
 		return true;
 	}
 	template <typename T, view View2>
-	constexpr auto equal(const std::initializer_list<T>& l, View2&& view2)
+	constexpr bool equal(const std::initializer_list<T>& l, View2&& view2)
 	{
 		return equal(detail::wrap_initializer_list(l), std::forward<View2>(view2));
 	}
 	template <view View1, typename T>
-	constexpr auto equal(View1&& view1, const std::initializer_list<T>& l)
+	constexpr bool equal(View1&& view1, const std::initializer_list<T>& l)
 	{
 		return equal(std::forward<View1>(view1), detail::wrap_initializer_list(l));
 	}
 	template <typename T, typename U>
-	constexpr auto equal(const std::initializer_list<T>& l, const std::initializer_list<U>& m)
+	constexpr bool equal(const std::initializer_list<T>& l, const std::initializer_list<U>& m)
 	{
 		return equal(detail::wrap_initializer_list(l), detail::wrap_initializer_list(m));
 	}

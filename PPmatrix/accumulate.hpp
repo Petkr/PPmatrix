@@ -7,7 +7,7 @@ namespace PPmatrix
 {
 	template <view View, typename BinaryFunction,
 		typename T = view_base_t<View>>
-	constexpr auto accumulate(View&& view, BinaryFunction f, T init = {})
+	constexpr T accumulate(View&& view, BinaryFunction f, T init = {})
 	{
 		for (const auto& x : view)
 			init = f(std::move(init), x);
@@ -16,7 +16,7 @@ namespace PPmatrix
 
 	template <typename T, typename BinaryFunction,
 		typename U = view_base_t<std::initializer_list<T>>>
-	constexpr auto accumulate(const std::initializer_list<T>& l, BinaryFunction f, U init = {})
+	constexpr U accumulate(const std::initializer_list<T>& l, BinaryFunction f, U init = {})
 	{
 		return accumulate(detail::wrap_initializer_list(l), f, std::move(init));
 	}
@@ -30,7 +30,7 @@ namespace PPmatrix
 		{}
 	};
 
-	template <view  View, typename BinaryFunction>
+	template <view View, typename BinaryFunction>
 	constexpr auto operator|(View&& view, foldl<BinaryFunction> f)
 	{
 		return accumulate(next(begin(view)) ^ end(view), f.f, *begin(view));
