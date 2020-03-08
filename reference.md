@@ -43,6 +43,15 @@ Referencia zápočtového programu PPmatrix.
 
 ## Koncepty
 
+### iterator
+
+	template <typename Iterator>
+	concept iterator = requires (Iterator i)
+	{
+		++i;
+		*i;
+	};
+
 ### view
 
 ```
