@@ -360,10 +360,10 @@ Spĺňa `matrix_view`.
 
 ## Generické algoritmy
 
-Algoritmy, ktoré akceptujú `view` na konštantné prvky
-majú navyše overloady pre `std::initializer_list`.
-Keďže výraz `{1, 2, 3}` nemá v C++ typ,
-kompilátor nedokáže vydedukovať template parameter.
+Keďže výraz `{1, 2, 3}` nemá v C++ typ, kompilátor nedokáže vydedukovať template parameter, napríklad pri volaní `accumulate({1, 2, 3}, [](auto&& x, auto&& y){ return x + y; })`.
+
+Algoritmy, ktoré akceptujú `view` na konštantné prvky majú teda navyše overloady pre `std::initializer_list`.
+
 
 ### accumulate
 
@@ -377,7 +377,7 @@ template <
 constexpr T accumulate(const View& v, BinaryFunction f, T init = {});
 ```
 
-Vráti ľavý fold `` cez funkciu `f` s počiatočnou hodnotou `init`.
+Vráti ľavý fold `v` cez binárnu funkciu `f` s počiatočnou hodnotou `init`.
 
 Napríklad pre `v` s prvkami `{ 1, 2, 5, 9 }`, funkciu `f` a `init` rovný `0`
 vráti `f(f(f(f(init, 1), 2), 5), 9)`.
@@ -741,8 +741,8 @@ public:
 };
 ```
 
-Pre `wrap_iterator wi(x)`:\
-`wi += n` volá `x += n`\
+Pre `wrap_iterator wi(x)`:
+`wi += n` volá `x += n`
 `*wi` vracia `x`.
 
 
