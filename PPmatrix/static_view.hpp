@@ -19,11 +19,11 @@ namespace PPmatrix
 		{
 			return value;
 		}
-		constexpr auto& operator+=(std::size_t)
+		constexpr auto& operator+=(size_t)
 		{
 			return *this;
 		}
-		constexpr auto& operator-=(std::size_t)
+		constexpr auto& operator-=(size_t)
 		{
 			return *this;
 		}

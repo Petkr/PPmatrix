@@ -15,12 +15,12 @@ namespace PPmatrix
 		{
 			return pair.second(*pair.first);
 		}
-		constexpr auto& operator+=(std::size_t offset)
+		constexpr auto& operator+=(size_t offset)
 		{
 			pair.first += offset;
 			return *this;
 		}
-		constexpr auto& operator-=(std::size_t offset)
+		constexpr auto& operator-=(size_t offset)
 		{
 			pair.first -= offset;
 			return *this;

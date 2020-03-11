@@ -5,8 +5,8 @@ namespace PPmatrix
 {
 	struct shift
 	{
-		std::size_t count;
-		shift(std::size_t count)
+		size_t count;
+		shift(size_t count)
 			: count(count)
 		{}
 	};

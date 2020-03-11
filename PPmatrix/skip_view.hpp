@@ -8,9 +8,9 @@ namespace PPmatrix
 	class skip_iterator
 	{
 		BaseIterator base_iterator;
-		std::size_t skip_length;
+		size_t skip_length;
 	public:
-		constexpr skip_iterator(BaseIterator base_iterator, std::size_t skip_length)
+		constexpr skip_iterator(BaseIterator base_iterator, size_t skip_length)
 			: base_iterator(base_iterator)
 			, skip_length(skip_length)
 		{}
@@ -18,12 +18,12 @@ namespace PPmatrix
 		{
 			return *base_iterator;
 		}
-		constexpr auto& operator+=(std::size_t offset)
+		constexpr auto& operator+=(size_t offset)
 		{
 			base_iterator += offset * skip_length;
 			return *this;
 		}
-		constexpr auto& operator-=(std::size_t offset)
+		constexpr auto& operator-=(size_t offset)
 		{
 			base_iterator -= offset * skip_length;
 			return *this;
@@ -41,8 +41,8 @@ namespace PPmatrix
 
 	struct skip
 	{
-		std::size_t skip_length;
-		skip(std::size_t skip_length)
+		size_t skip_length;
+		skip(size_t skip_length)
 			: skip_length(skip_length)
 		{}
 

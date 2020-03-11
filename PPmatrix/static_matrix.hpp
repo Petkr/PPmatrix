@@ -4,14 +4,14 @@
 
 namespace PPmatrix
 {
-	template <typename T, std::size_t size>
+	template <typename T, size_t size>
 	class static_matrix
 	{
-		std::size_t width_;
+		size_t width_;
 		std::array<T, size> data_;
 	public:
 
-		constexpr explicit static_matrix(std::size_t width)
+		constexpr explicit static_matrix(size_t width)
 			: width_(width)
 			, data_()
 		{}
@@ -32,7 +32,7 @@ namespace PPmatrix
 		{
 			return PPmatrix::end(data_);
 		}
-		constexpr std::size_t width() const
+		constexpr size_t width() const
 		{
 			return width_;
 		}

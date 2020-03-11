@@ -28,7 +28,7 @@ namespace PPmatrix
 {
 	namespace flag
 	{
-		using bitmask = std::size_t;
+		using bitmask = size_t;
 
 		constexpr bitmask		none = 0 << 0;
 		constexpr bitmask      range = 1 << 0;
@@ -39,7 +39,7 @@ namespace PPmatrix
 		constexpr bitmask triangular = 1 << 5;
 		constexpr bitmask	  height = 1 << 6;
 	}
-	constexpr bool flag_set(flag::bitmask bitmask, std::size_t flag)
+	constexpr bool flag_set(flag::bitmask bitmask, size_t flag)
 	{
 		return (bitmask & flag) != 0;
 	}
@@ -54,11 +54,11 @@ namespace PPmatrix
 		template <iterator Iterator>
 		class row
 		{
-			std::size_t width_;
+			size_t width_;
 			Iterator begin_;
 		public:
 			template <matrix_view MatrixView>
-			constexpr row(MatrixView&& matrix, std::size_t index)
+			constexpr row(MatrixView&& matrix, size_t index)
 				: width_(width(matrix))
 				, begin_(PPmatrix::begin(matrix) + index * width_)
 			{}
@@ -74,12 +74,12 @@ namespace PPmatrix
 			{
 				return *this;
 			}
-			constexpr auto& operator+=(std::size_t count)
+			constexpr auto& operator+=(size_t count)
 			{
 				begin_ += count * width_;
 				return *this;
 			}
-			constexpr auto& operator-=(std::size_t count)
+			constexpr auto& operator-=(size_t count)
 			{
 				begin_ -= count * width_;
 				return *this;
@@ -90,17 +90,17 @@ namespace PPmatrix
 			}
 		};
 		template <matrix_view MatrixView>
-		row(MatrixView&&, std::size_t) -> row<begin_t<MatrixView>>;
+		row(MatrixView&&, size_t) -> row<begin_t<MatrixView>>;
 
 		template <iterator Iterator>
 		class column
 		{
-			std::size_t width_;
+			size_t width_;
 			Iterator begin_;
 			Iterator end_;
 		public:
 			template <matrix_view MatrixView>
-			column(MatrixView&& matrix, std::size_t index)
+			column(MatrixView&& matrix, size_t index)
 				: width_(width(matrix))
 				, begin_(PPmatrix::begin(matrix) + index)
 				, end_(PPmatrix::end(matrix) + index)
@@ -117,13 +117,13 @@ namespace PPmatrix
 			{
 				return *this;
 			}
-			constexpr auto& operator+=(std::size_t count)
+			constexpr auto& operator+=(size_t count)
 			{
 				begin_ += count;
 				end_ += count;
 				return *this;
 			}
-			constexpr auto& operator-=(std::size_t count)
+			constexpr auto& operator-=(size_t count)
 			{
 				begin_ -= count;
 				end_ -= count;
@@ -135,7 +135,7 @@ namespace PPmatrix
 			}
 		};
 		template <matrix_view MatrixView>
-		column(MatrixView&&, std::size_t) -> column<begin_t<MatrixView>>;
+		column(MatrixView&&, size_t) -> column<begin_t<MatrixView>>;
 
 		template <iterator Iterator>
 		class column_sentinel
@@ -144,7 +144,7 @@ namespace PPmatrix
 			Iterator end_;
 		public:
 			template <matrix_view MatrixView>
-			column_sentinel(MatrixView&& matrix, std::size_t index)
+			column_sentinel(MatrixView&& matrix, size_t index)
 				: begin_((PPmatrix::begin(matrix) + index) & skip(width(matrix)))
 				, end_(PPmatrix::end(matrix) + index)
 			{}
@@ -160,13 +160,13 @@ namespace PPmatrix
 			{
 				return *this;
 			}
-			constexpr auto& operator+=(std::size_t count)
+			constexpr auto& operator+=(size_t count)
 			{
 				begin_.base() += count;
 				end_ += count;
 				return *this;
 			}
-			constexpr auto& operator-=(std::size_t count)
+			constexpr auto& operator-=(size_t count)
 			{
 				begin_.base() -= count;
 				end_ -= count;
@@ -178,31 +178,31 @@ namespace PPmatrix
 			}
 		};
 		template <matrix_view MatrixView>
-		column_sentinel(MatrixView&&, std::size_t) -> column_sentinel<begin_t<MatrixView>>;
+		column_sentinel(MatrixView&&, size_t) -> column_sentinel<begin_t<MatrixView>>;
 	}
 
-	constexpr auto& element(matrix_view auto&& matrix, std::size_t row, std::size_t column, std::size_t width)
+	constexpr auto& element(matrix_view auto&& matrix, size_t row, size_t column, size_t width)
 	{
 		return *(begin(matrix) + row * width + column);
 	}
-	constexpr auto& element(matrix_view auto&& matrix, std::size_t row, std::size_t column)
+	constexpr auto& element(matrix_view auto&& matrix, size_t row, size_t column)
 	{
 		return element(matrix, row, column, width(matrix));
 	}
 
-	constexpr view auto row(matrix_view auto&& matrix, std::size_t index)
+	constexpr view auto row(matrix_view auto&& matrix, size_t index)
 	{
 		return detail::row(matrix, index);
 	}
-	constexpr view auto row_sentinel(matrix_view auto&& matrix, std::size_t index)
+	constexpr view auto row_sentinel(matrix_view auto&& matrix, size_t index)
 	{
 		return detail::row(matrix, index);
 	}
-	constexpr view auto column(matrix_view auto&& matrix, std::size_t index)
+	constexpr view auto column(matrix_view auto&& matrix, size_t index)
 	{
 		return detail::column(matrix, index);
 	}
-	constexpr view auto column_sentinel(matrix_view auto&& matrix, std::size_t index)
+	constexpr view auto column_sentinel(matrix_view auto&& matrix, size_t index)
 	{
 		return detail::column_sentinel(matrix, index);
 	}
@@ -271,8 +271,8 @@ namespace PPmatrix
 		if (!is_square(matrix))
 			return false;
 
-		for (std::size_t i = 1; i != width(matrix); ++i)
-			for (std::size_t j = 0; j != i; ++j)
+		for (size_t i = 1; i != width(matrix); ++i)
+			for (size_t j = 0; j != i; ++j)
 				if (element(matrix, i, j) != 0)
 					return false;
 
@@ -283,8 +283,8 @@ namespace PPmatrix
 		if (!is_square(matrix))
 			return false;
 
-		for (std::size_t i = 0; i != width(matrix) - 1; ++i)
-			for (std::size_t j = i + 1; j != width(matrix); ++j)
+		for (size_t i = 0; i != width(matrix) - 1; ++i)
+			for (size_t j = i + 1; j != width(matrix); ++j)
 				if (element(matrix, i, j) != 0)
 					return false;
 
@@ -308,8 +308,8 @@ namespace PPmatrix
 				|| width(B) != width(result))
 				throw "incompatible sizes";
 
-		for (std::size_t i = 0; i != height(result); ++i)
-			for (std::size_t j = 0; j != width(result); ++j)
+		for (size_t i = 0; i != height(result); ++i)
+			for (size_t j = 0; j != width(result); ++j)
 				element(result, i, j) = inner_product(row_sentinel(A, i), column_sentinel(B, j));
 	}
 	constexpr void multiply(matrix_view auto&& matrix, const auto& scalar)
@@ -332,8 +332,8 @@ namespace PPmatrix
 	{
 		if constexpr (const_square)
 		{
-			for (std::size_t i = 0; i != width(matrix); ++i)
-				for (std::size_t j = i + 1; j != width(matrix); ++j)
+			for (size_t i = 0; i != width(matrix); ++i)
+				for (size_t j = i + 1; j != width(matrix); ++j)
 					std::swap(element(matrix, i, j), element(matrix, j, i));
 		}
 		else
@@ -345,10 +345,10 @@ namespace PPmatrix
 				// https://www.geeksforgeeks.org/inplace-m-x-n-size-matrix-transpose/
 
 				auto t = default_element(matrix);
-				std::size_t next;
-				std::size_t cycleBegin;
-				std::size_t i;
-				std::size_t s = size(matrix) - 1;
+				size_t next;
+				size_t cycleBegin;
+				size_t i;
+				size_t s = size(matrix) - 1;
 				std::vector<bool> b(size(matrix));
 				b.assign(b.size(), false);
 				b[0] = true;
@@ -392,7 +392,7 @@ namespace PPmatrix
 	}
 
 	template <flag::bitmask flags = flag::none>
-	constexpr void swap_rows(matrix_view auto&& matrix, std::size_t i1, std::size_t i2)
+	constexpr void swap_rows(matrix_view auto&& matrix, size_t i1, size_t i2)
 	{
 		detail::check_row_indices<flag_set(flags, flag::range)>(matrix, i1, i2);
 
@@ -403,7 +403,7 @@ namespace PPmatrix
 		swap_ranges(row_sentinel(matrix, i1), row_sentinel(matrix, i2));
 	}
 	template <flag::bitmask flags = flag::none>
-	constexpr void multiply_row(matrix_view auto&& matrix, std::size_t index, const auto& scalar)
+	constexpr void multiply_row(matrix_view auto&& matrix, size_t index, const auto& scalar)
 	{
 		detail::check_row_indices<flag_set(flags, flag::range)>(matrix, index);
 
@@ -415,7 +415,7 @@ namespace PPmatrix
 			element *= scalar;
 	}
 	template <flag::bitmask flags = flag::none>
-	constexpr void divide_row(matrix_view auto&& matrix, std::size_t index, const auto& scalar)
+	constexpr void divide_row(matrix_view auto&& matrix, size_t index, const auto& scalar)
 	{
 		detail::check_row_indices<flag_set(flags, flag::range)>(matrix, index);
 
@@ -427,7 +427,7 @@ namespace PPmatrix
 			element /= scalar;
 	}
 	template <flag::bitmask flags = flag::none>
-	constexpr auto simplify_row(matrix_view auto&& matrix, std::size_t index)
+	constexpr auto simplify_row(matrix_view auto&& matrix, size_t index)
 	{
 		detail::check_row_indices<flag_set(flags, flag::range)>(matrix, index);
 
@@ -450,7 +450,7 @@ namespace PPmatrix
 		return gcd;
 	}
 	template <flag::bitmask flags = flag::none>
-	constexpr void add_rows(matrix_view auto&& matrix, std::size_t i1, const auto& scalar, std::size_t i2)
+	constexpr void add_rows(matrix_view auto&& matrix, size_t i1, const auto& scalar, size_t i2)
 	{
 		detail::check_row_indices<flag_set(flags, flag::range)>(matrix, i1, i2);
 
@@ -486,12 +486,12 @@ namespace PPmatrix
 		if constexpr (calculate_determinant)
 			determinant = 1;
 
-		std::size_t r = 0;
-		std::size_t c = 0;
+		size_t r = 0;
+		size_t c = 0;
 
 		while (r != height(matrix) && c != width(matrix))
 		{
-			std::size_t k = r;
+			size_t k = r;
 			for (; k != height(matrix) && element(matrix, k, c) == 0; ++k);
 
 			if (k != height(matrix))
@@ -516,7 +516,7 @@ namespace PPmatrix
 				if constexpr ((!reduced || !integral) && calculate_determinant)
 					determinant *= i_element;
 
-				std::size_t j;
+				size_t j;
 				if constexpr (reduced)
 					j = 0;
 				else
@@ -552,7 +552,7 @@ namespace PPmatrix
 
 				if constexpr (reduced && integral)
 				{
-					for (std::size_t i = 0; i != height(matrix); ++i)
+					for (size_t i = 0; i != height(matrix); ++i)
 					{
 						if constexpr (calculate_determinant)
 							determinant *= simplify_row(matrix, i);
@@ -585,11 +585,11 @@ namespace PPmatrix
 	{
 		return REF<false, true, false>(matrix);
 	}
-	constexpr std::size_t rank(matrix_view auto&& matrix)
+	constexpr size_t rank(matrix_view auto&& matrix)
 	{
 		return REF<false, false, true>(matrix);
 	}
-	constexpr std::size_t REF_reduced_rank(matrix_view auto&& matrix)
+	constexpr size_t REF_reduced_rank(matrix_view auto&& matrix)
 	{
 		return REF<true, false, true>(matrix);
 	}
@@ -631,7 +631,7 @@ namespace PPmatrix
 	template <flag::bitmask flags = flag::none>
 	constexpr auto solve_linear_equations(matrix_view auto&& M, matrix_view auto&& v)
 	{
-		using return_t = std::make_signed_t<std::size_t>;
+		using return_t = std::make_signed_t<size_t>;
 
 		if constexpr (flag_set(flags, flag::height))
 			if (height(v) != height(M) || width(v) != 1)
@@ -642,8 +642,8 @@ namespace PPmatrix
 
 		auto r = REF_reduced_rank(matrix);
 
-		std::size_t sub_rank = 0;
-		for (std::size_t j = 0; j != w && sub_rank != height(matrix); ++j)
+		size_t sub_rank = 0;
+		for (size_t j = 0; j != w && sub_rank != height(matrix); ++j)
 			if (element(matrix, sub_rank, j) != 0)
 				++sub_rank;
 
@@ -654,7 +654,7 @@ namespace PPmatrix
 			if (r == w)
 			{
 				auto k = begin(v);
-				for (std::size_t i = 0; k != end(v); ++i, ++k)
+				for (size_t i = 0; k != end(v); ++i, ++k)
 					*k = element(matrix, i, w) / element(matrix, i, i);
 			}
 			return return_t(w - r);
@@ -684,12 +684,12 @@ namespace PPmatrix
 
 	std::ostream& pretty_print(std::ostream& out, matrix_view auto&& matrix)
 	{
-		std::size_t max_width = *max_element(matrix | transform(functor::number_width));
+		size_t max_width = *max_element(matrix | transform(functor::number_width));
 
 		return detail::print_helper(out, matrix,
 			[&out, max_width](const auto& element)
 			{
-				for (std::size_t i = 0; i != max_width - functor::number_width(element); ++i)
+				for (size_t i = 0; i != max_width - functor::number_width(element); ++i)
 					out << ' ';
 				out << element;
 			});

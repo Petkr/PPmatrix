@@ -11,15 +11,15 @@ namespace PPmatrix
 			requires (const T t)
 			{
 				{ t.width() } -> is_size_t;
-				// { t.width() } -> same<std::size_t>; // doesn't compile
+				// { t.width() } -> same<size_t>; // doesn't compile
 			};
 	}
 
-	consteval std::size_t width(view auto&&)
+	consteval size_t width(view auto&&)
 	{
 		return 1;
 	}
-	constexpr std::size_t width(detail::view_with_width auto&& matrix)
+	constexpr size_t width(detail::view_with_width auto&& matrix)
 	{
 		return matrix.width();
 	}
@@ -29,10 +29,10 @@ namespace PPmatrix
 		view<MatrixView> &&
 		requires (const MatrixView mv)
 		{
-			{ width(mv) } -> same<std::size_t>;
+			{ width(mv) } -> same<size_t>;
 		};
 
-	constexpr std::size_t height(matrix_view auto&& matrix)
+	constexpr size_t height(matrix_view auto&& matrix)
 	{
 		return PPmatrix::size(matrix) / width(matrix);
 	}

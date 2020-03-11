@@ -25,9 +25,14 @@ namespace PPmatrix
 		{
 			return value;
 		}
-		constexpr auto& operator+=(std::size_t offset)
+		constexpr auto& operator+=(size_t offset)
 		{
 			value += offset;
+			return *this;
+		}
+		constexpr auto& operator-=(size_t offset)
+		{
+			value -= offset;
 			return *this;
 		}
 		constexpr auto operator==(const T& other) const

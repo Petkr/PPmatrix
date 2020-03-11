@@ -4,14 +4,14 @@
 
 namespace PPmatrix
 {
-	consteval std::size_t number_width(std::floating_point auto number)
+	consteval size_t number_width(std::floating_point auto number)
 	{
 		return 1;
 	}
 	template <std::integral T>
-	constexpr std::size_t number_width(T number)
+	constexpr size_t number_width(T number)
 	{
-		std::size_t width = 0;
+		size_t width = 0;
 
 		if constexpr (std::unsigned_integral<T>)
 		{

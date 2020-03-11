@@ -8,9 +8,9 @@ namespace PPmatrix
 	class take_iterator
 	{
 		BaseIterator base_iterator;
-		std::size_t count;
+		ssize_t count;
 	public:
-		constexpr take_iterator(BaseIterator base_iterator, std::size_t count)
+		constexpr take_iterator(BaseIterator base_iterator, size_t count)
 			: base_iterator(base_iterator)
 			, count(count)
 		{}
@@ -19,11 +19,16 @@ namespace PPmatrix
 		{
 			return *base_iterator;
 		}
-		constexpr auto& operator+=(std::size_t offset)
+		constexpr auto& operator+=(size_t offset)
 		{
 			base_iterator += offset;
-			if (offset <= count)
-				count -= offset;
+			count -= offset;
+			return *this;
+		}
+		constexpr auto& operator-=(size_t offset)
+		{
+			base_iterator -= offset;
+			count += offset;
 			return *this;
 		}
 		constexpr auto operator==(iterator auto other) const
@@ -34,17 +39,17 @@ namespace PPmatrix
 
 	struct take
 	{
-		std::size_t count;
-		constexpr take(std::size_t count)
+		size_t count;
+		constexpr take(size_t count)
 			: count(count)
 		{}
 	};
 
-	constexpr view auto take_view(iterator auto i, std::size_t n)
+	constexpr view auto take_view(iterator auto i, size_t n)
 	{
 		return take_iterator(i, n) ^ unbounded;
 	}
-	constexpr view auto take_view(view auto&& v, std::size_t n)
+	constexpr view auto take_view(view auto&& v, size_t n)
 	{
 		return take_iterator(begin(v), n) ^ end(v);
 	}

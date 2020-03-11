@@ -1,29 +1,30 @@
 #pragma once
 #include "same.hpp"
 #include "nonvoid.hpp"
+#include "size_t.hpp"
 
 namespace PPmatrix
 {
 	namespace detail
 	{
 		template <typename T>
-		concept has_operator_advance = requires (T t, std::size_t n)
+		concept has_operator_advance = requires (T t, size_t n)
 		{
 			t += n;
 		};
 		template <typename T>
-		concept has_operator_back = requires (T t, std::size_t n)
+		concept has_operator_back = requires (T t, size_t n)
 		{
 			t -= n;
 		};
 	}
 
-	constexpr auto operator+(detail::has_operator_advance auto t, std::size_t u)
+	constexpr auto operator+(detail::has_operator_advance auto t, size_t u)
 	{
 		t += u;
 		return t;
 	}
-	constexpr auto operator-(detail::has_operator_back auto t, std::size_t u)
+	constexpr auto operator-(detail::has_operator_back auto t, size_t u)
 	{
 		t -= u;
 		return t;

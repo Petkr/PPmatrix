@@ -160,7 +160,7 @@ namespace PPmatrix
 
 	constexpr auto number_width(rational<auto> q)
 	{
-		std::size_t width = number_width(q.num);
+		size_t width = number_width(q.num);
 		if (!q.is_integral())
 			width += 1 + number_width(q.den);
 		return width;

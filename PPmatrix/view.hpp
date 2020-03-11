@@ -1,7 +1,7 @@
 #pragma once
-#include <cstddef>
 #include <utility>
 #include <type_traits>
+#include "size_t.hpp"
 #include "iterator.hpp"
 
 namespace PPmatrix
@@ -45,7 +45,7 @@ namespace PPmatrix
 	{
 		// workaround
 		template <typename T>
-		concept is_size_t = same<T, std::size_t>;
+		concept is_size_t = same<T, size_t>;
 
 		template <typename T>
 		concept view_with_size =
@@ -53,14 +53,14 @@ namespace PPmatrix
 			requires (const T t)
 			{
 				{ t.size() } -> is_size_t;
-				// { t.size() } -> same<std::size_t>; // doesn't compile
+				// { t.size() } -> same<size_t>; // doesn't compile
 			};
 	}
-	constexpr std::size_t size(view auto&& v)
+	constexpr size_t size(view auto&& v)
 	{
 		return end(v) - begin(v);
 	}
-	constexpr std::size_t size(detail::view_with_size auto&& v)
+	constexpr size_t size(detail::view_with_size auto&& v)
 	{
 		return v.size();
 	}

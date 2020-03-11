@@ -8,30 +8,30 @@ namespace PPmatrix
 	template <iterator LeftIterator, iterator RightIterator>
 	class augmented_matrix_view_iterator
 	{
-		std::size_t left_pos;
-		std::size_t left_width;
+		size_t left_pos;
+		size_t left_width;
 		LeftIterator left_iterator;
-		std::size_t right_pos;
-		std::size_t right_width;
+		size_t right_pos;
+		size_t right_width;
 		RightIterator right_iterator;
 		bool left_active;
 
-		void move_left(std::size_t offset)
+		void move_left(size_t offset)
 		{
 			left_iterator += offset;
 			left_pos += offset;
 		}
-		void move_right(std::size_t offset)
+		void move_right(size_t offset)
 		{
 			right_iterator += offset;
 			right_pos += offset;
 		}
-		void up_rows(std::size_t rows)
+		void up_rows(size_t rows)
 		{
 			left_iterator -= rows * left_width;
 			right_iterator -= rows * right_width;
 		}
-		void down_rows(std::size_t rows)
+		void down_rows(size_t rows)
 		{
 			left_iterator += rows * left_width;
 			right_iterator += rows * right_width;
@@ -41,7 +41,7 @@ namespace PPmatrix
 		friend class augmented_matrix_view_iterator;
 
 	public:
-		augmented_matrix_view_iterator(LeftIterator left_iterator, std::size_t left_width, RightIterator right_iterator, std::size_t right_width)
+		augmented_matrix_view_iterator(LeftIterator left_iterator, size_t left_width, RightIterator right_iterator, size_t right_width)
 			: left_pos(0)
 			, left_width(left_width)
 			, left_iterator(left_iterator)
@@ -89,7 +89,7 @@ namespace PPmatrix
 			{
 				--left_iterator;
 				--left_pos;
-				if (left_pos == std::size_t(-1))
+				if (left_pos == size_t(-1))
 				{
 					right_iterator -= right_width;
 					left_pos = left_width - 1;
@@ -100,7 +100,7 @@ namespace PPmatrix
 			{
 				--right_iterator;
 				--right_pos;
-				if (right_pos == std::size_t(-1))
+				if (right_pos == size_t(-1))
 				{
 					right_pos = right_width - 1;
 					left_active = true;
@@ -109,7 +109,7 @@ namespace PPmatrix
 
 			return *this;
 		}
-		constexpr auto& operator+=(std::size_t offset)
+		constexpr auto& operator+=(size_t offset)
 		{
 			auto w = left_width + right_width;
 			auto rows = offset / w;
@@ -117,12 +117,12 @@ namespace PPmatrix
 
 			down_rows(rows);
 
-			for (std::size_t i = 0; i != cols; ++i)
+			for (size_t i = 0; i != cols; ++i)
 				++(*this);
 
 			return *this;
 		}
-		constexpr auto& operator-=(std::size_t offset)
+		constexpr auto& operator-=(size_t offset)
 		{
 			auto w = left_width + right_width;
 			auto rows = offset / w;
@@ -130,7 +130,7 @@ namespace PPmatrix
 
 			up_rows(rows);
 
-			for (std::size_t i = 0; i != cols; ++i)
+			for (size_t i = 0; i != cols; ++i)
 				--(*this);
 
 			return *this;
@@ -201,11 +201,11 @@ namespace PPmatrix
 				PPmatrix::end(right),
 				PPmatrix::width(right));
 		}
-		std::size_t width() const
+		size_t width() const
 		{
 			return PPmatrix::width(left) + PPmatrix::width(right);
 		}
-		std::size_t size() const
+		size_t size() const
 		{
 			return PPmatrix::size(left) + PPmatrix::size(right);
 		}
