@@ -49,137 +49,131 @@ namespace PPmatrix
 		return size(A) == size(B) && width(A) == width(B);
 	}
 
-	namespace detail
+	template <iterator Iterator>
+	class row_t
 	{
-		template <iterator Iterator>
-		class row
+		size_t width_;
+		Iterator begin_;
+	public:
+		constexpr row_t(matrix_view auto&& matrix, size_t index)
+			: width_(width(matrix))
+			, begin_(PPmatrix::begin(matrix) + index * width_)
+		{}
+		constexpr iterator auto begin() const
 		{
-			size_t width_;
-			Iterator begin_;
-		public:
-			template <matrix_view MatrixView>
-			constexpr row(MatrixView&& matrix, size_t index)
-				: width_(width(matrix))
-				, begin_(PPmatrix::begin(matrix) + index * width_)
-			{}
-			constexpr iterator auto begin() const
-			{
-				return begin_;
-			}
-			constexpr iterator auto end() const
-			{
-				return begin_ + width_;
-			}
-			constexpr auto& operator*() const
-			{
-				return *this;
-			}
-			constexpr auto& operator+=(size_t count)
-			{
-				begin_ += count * width_;
-				return *this;
-			}
-			constexpr auto& operator-=(size_t count)
-			{
-				begin_ -= count * width_;
-				return *this;
-			}
-			constexpr bool operator==(iterator auto other) const
-			{
-				return begin_ == other;
-			}
-		};
-		template <matrix_view MatrixView>
-		row(MatrixView&&, size_t) -> row<begin_t<MatrixView>>;
+			return begin_;
+		}
+		constexpr iterator auto end() const
+		{
+			return begin_ + width_;
+		}
+		constexpr auto& operator*()
+		{
+			return *this;
+		}
+		constexpr auto& operator+=(size_t count)
+		{
+			begin_ += count * width_;
+			return *this;
+		}
+		constexpr auto& operator-=(size_t count)
+		{
+			begin_ -= count * width_;
+			return *this;
+		}
+		constexpr bool operator==(iterator auto other) const
+		{
+			return begin_ == other;
+		}
+	};
+	template <matrix_view MatrixView>
+	row_t(MatrixView&&, size_t) -> row_t<begin_t<MatrixView>>;
 
-		template <iterator Iterator>
-		class column
+	template <iterator Iterator>
+	class column_t
+	{
+		size_t width_;
+		Iterator begin_;
+		Iterator end_;
+	public:
+		column_t(matrix_view auto&& matrix, size_t index)
+			: width_(width(matrix))
+			, begin_(PPmatrix::begin(matrix) + index)
+			, end_(PPmatrix::end(matrix) + index)
+		{}
+		constexpr iterator auto begin() const
 		{
-			size_t width_;
-			Iterator begin_;
-			Iterator end_;
-		public:
-			template <matrix_view MatrixView>
-			column(MatrixView&& matrix, size_t index)
-				: width_(width(matrix))
-				, begin_(PPmatrix::begin(matrix) + index)
-				, end_(PPmatrix::end(matrix) + index)
-			{}
-			constexpr iterator auto begin() const
-			{
-				return begin_ & skip(width_);
-			}
-			constexpr iterator auto end() const
-			{
-				return end_ & skip(width_);
-			}
-			constexpr auto& operator*() const
-			{
-				return *this;
-			}
-			constexpr auto& operator+=(size_t count)
-			{
-				begin_ += count;
-				end_ += count;
-				return *this;
-			}
-			constexpr auto& operator-=(size_t count)
-			{
-				begin_ -= count;
-				end_ -= count;
-				return *this;
-			}
-			constexpr bool operator==(iterator auto other) const
-			{
-				return begin_ == other;
-			}
-		};
-		template <matrix_view MatrixView>
-		column(MatrixView&&, size_t) -> column<begin_t<MatrixView>>;
+			return begin_ & skip(width_);
+		}
+		constexpr iterator auto end() const
+		{
+			return end_ & skip(width_);
+		}
+		constexpr auto& operator*()
+		{
+			return *this;
+		}
+		constexpr auto& operator+=(size_t count)
+		{
+			begin_ += count;
+			end_ += count;
+			return *this;
+		}
+		constexpr auto& operator-=(size_t count)
+		{
+			begin_ -= count;
+			end_ -= count;
+			return *this;
+		}
+		constexpr bool operator==(iterator auto other) const
+		{
+			return begin_ == other;
+		}
+	};
+	template <matrix_view MatrixView>
+	column_t(MatrixView&&, size_t) -> column_t<begin_t<MatrixView>>;
 
-		template <iterator Iterator>
-		class column_sentinel
+	template <iterator Iterator>
+	class column_sentinel_t
+	{
+		skip_iterator<Iterator> begin_;
+		Iterator end_;
+	public:
+		column_sentinel_t(matrix_view auto&& matrix, size_t index)
+			: begin_((PPmatrix::begin(matrix) + index) & skip(width(matrix)))
+			, end_(PPmatrix::end(matrix) + index)
+		{}
+		constexpr iterator auto begin() const
 		{
-			skip_iterator<Iterator> begin_;
-			Iterator end_;
-		public:
-			template <matrix_view MatrixView>
-			column_sentinel(MatrixView&& matrix, size_t index)
-				: begin_((PPmatrix::begin(matrix) + index) & skip(width(matrix)))
-				, end_(PPmatrix::end(matrix) + index)
-			{}
-			constexpr iterator auto begin() const
-			{
-				return begin_;
-			}
-			constexpr iterator auto end() const
-			{
-				return end_;
-			}
-			constexpr auto& operator*() const
-			{
-				return *this;
-			}
-			constexpr auto& operator+=(size_t count)
-			{
-				begin_.base() += count;
-				end_ += count;
-				return *this;
-			}
-			constexpr auto& operator-=(size_t count)
-			{
-				begin_.base() -= count;
-				end_ -= count;
-				return *this;
-			}
-			constexpr bool operator==(iterator auto other) const
-			{
-				return begin_ == other;
-			}
-		};
-		template <matrix_view MatrixView>
-		column_sentinel(MatrixView&&, size_t) -> column_sentinel<begin_t<MatrixView>>;
-	}
+			return begin_;
+		}
+		constexpr iterator auto end() const
+		{
+			return end_;
+		}
+		constexpr auto& operator*()
+		{
+			return *this;
+		}
+		constexpr auto& operator+=(size_t count)
+		{
+			begin_.base() += count;
+			end_ += count;
+			return *this;
+		}
+		constexpr auto& operator-=(size_t count)
+		{
+			begin_.base() -= count;
+			end_ -= count;
+			return *this;
+		}
+		constexpr bool operator==(iterator auto other) const
+		{
+			return begin_ == other;
+		}
+	};
+	template <matrix_view MatrixView>
+	column_sentinel_t(MatrixView&&, size_t) -> column_sentinel_t<begin_t<MatrixView>>;
 
 	constexpr auto& element(matrix_view auto&& matrix, size_t row, size_t column, size_t width)
 	{
@@ -192,19 +186,19 @@ namespace PPmatrix
 
 	constexpr view auto row(matrix_view auto&& matrix, size_t index)
 	{
-		return detail::row(matrix, index);
+		return row_t(matrix, index);
 	}
 	constexpr view auto row_sentinel(matrix_view auto&& matrix, size_t index)
 	{
-		return detail::row(matrix, index);
+		return row_t(matrix, index);
 	}
 	constexpr view auto column(matrix_view auto&& matrix, size_t index)
 	{
-		return detail::column(matrix, index);
+		return column_t(matrix, index);
 	}
 	constexpr view auto column_sentinel(matrix_view auto&& matrix, size_t index)
 	{
-		return detail::column_sentinel(matrix, index);
+		return column_sentinel_t(matrix, index);
 	}
 
 	constexpr iterator auto rows_begin(matrix_view auto&& matrix)
