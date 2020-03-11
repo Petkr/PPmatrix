@@ -1,6 +1,6 @@
 #pragma once
 #include <numeric>
-#include <type_traits>
+#include <concepts>
 #include <cstdint>
 #include <iostream>
 
@@ -9,11 +9,9 @@ namespace PPmatrix
 	struct dont_simplify_tag_t {};
 	constexpr dont_simplify_tag_t dont_simplify_tag{};
 
-	template <typename T>
+	template <std::integral T>
 	struct rational
 	{
-		static_assert(std::is_integral_v<T>);
-
 		T num;
 		T den;
 
@@ -160,8 +158,7 @@ namespace PPmatrix
 		}
 	};
 
-	template <typename T>
-	constexpr auto number_width(rational<T> q)
+	constexpr auto number_width(rational<auto> q)
 	{
 		std::size_t width = number_width(q.num);
 		if (!q.is_integral())
@@ -169,8 +166,7 @@ namespace PPmatrix
 		return width;
 	}
 
-	template <typename T>
-	std::ostream& operator<<(std::ostream& out, rational<T> q)
+	std::ostream& operator<<(std::ostream& out, rational<auto> q)
 	{
 		out << q.num;
 		if (!q.is_integral())

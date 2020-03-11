@@ -1,4 +1,6 @@
 #pragma once
+#include "same.hpp"
+#include "nonvoid.hpp"
 
 namespace PPmatrix
 {
@@ -16,54 +18,39 @@ namespace PPmatrix
 		};
 	}
 
-	template <detail::has_operator_advance T>
-	constexpr auto operator+(T t, std::size_t u)
+	constexpr auto operator+(detail::has_operator_advance auto t, std::size_t u)
 	{
 		t += u;
 		return t;
 	}
-	template <detail::has_operator_back T>
-	constexpr auto operator-(T t, std::size_t u)
+	constexpr auto operator-(detail::has_operator_back auto t, std::size_t u)
 	{
 		t -= u;
 		return t;
 	}
-	template <detail::has_operator_advance T>
-	constexpr auto& operator++(T& t)
+	constexpr auto& operator++(detail::has_operator_advance auto& t)
 	{
 		t += 1;
 		return t;
 	}
-	template <detail::has_operator_back T>
-	constexpr auto& operator--(T& t)
+	constexpr auto& operator--(detail::has_operator_back auto& t)
 	{
 		t -= 1;
 		return t;
 	}
 
-	template <typename Sentinel, typename Iterator>
-	concept sentinel = requires (Iterator i, Sentinel s)
+	template <typename Iterator>
+	concept iterator = requires (Iterator i)
 	{
-		i != s;
+		{ ++i } -> same<Iterator&>;
+		{ *i } -> nonvoid;
 	};
 
-	template <typename Iterator1, typename Iterator2>
-	requires sentinel<Iterator2, Iterator1> || sentinel<Iterator1, Iterator2>
-	constexpr auto compare_iterator(Iterator1 i1, Iterator2 i2)
-	{
-		if constexpr (sentinel<Iterator2, Iterator1>)
-			return i1 != i2;
-		else
-			return i2 != i1;
-	}
-
-
-	template <typename Iterator>
-	concept iterator =
-		//sentinel<Iterator, Iterator> &&
-		requires (Iterator i)
+	template <typename Sentinel, typename Iterator>
+	concept sentinel =
+		iterator<Iterator> &&
+		requires (const Iterator i, const Sentinel s)
 		{
-			++i;
-			*i;
+			{ i == s } -> same<bool>;
 		};
 }

@@ -3,26 +3,25 @@
 
 namespace PPmatrix
 {
-	template <view ViewFrom, view ViewTo>
-	constexpr void copy(ViewFrom&& from, ViewTo&& to)
+	constexpr void copy(view auto&& from, view auto&& to)
 	{
-		zip(from, std::forward<ViewTo>(to),
+		zip(from, to,
 			[](const auto& from, auto& to)
 			{
 				to = from;
 			});
 	}
-	template <typename T, view ViewTo>
-	constexpr void copy(const std::initializer_list<T>& l, ViewTo&& to)
+
+	constexpr void copy(const std::initializer_list<auto>& l, view auto&& to)
 	{
-		copy(detail::wrap_initializer_list(l), std::forward<ViewTo>(to));
+		copy(detail::wrap_initializer_list(l), to);
 	}
 
 	namespace functor
 	{
-		constexpr auto copy = []<typename ViewTo>(const auto& from, ViewTo&& to)
+		constexpr auto copy = [](view auto&& from, view auto&& to)
 		{
-			PPmatrix::copy(from, std::forward<ViewTo>(to));
+			PPmatrix::copy(from, to);
 		};
 	}
 }

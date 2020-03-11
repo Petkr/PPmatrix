@@ -1,11 +1,11 @@
 #pragma once
+#include "view.hpp"
 
 namespace PPmatrix
 {
-	template <view View, typename T>
-	constexpr void fill(View&& view, const T& value)
+	constexpr void fill(view auto&& v, const auto& value)
 	{
-		for (auto&& x : view)
+		for (auto&& x : v)
 			x = value;
 	}
 }

@@ -11,7 +11,7 @@ namespace PPmatrix
 		constexpr transform_iterator(BaseIterator base_iterator, Transform t)
 			: pair{ base_iterator, t }
 		{}
-		constexpr decltype(auto) operator*()
+		constexpr decltype(auto) operator*() const
 		{
 			return pair.second(*pair.first);
 		}
@@ -25,10 +25,9 @@ namespace PPmatrix
 			pair.first -= offset;
 			return *this;
 		}
-		template <iterator OtherIterator>
-		constexpr bool operator!=(OtherIterator other) const
+		constexpr auto operator==(iterator auto other) const
 		{
-			return compare_iterator(pair.first, other);
+			return pair.first == other;
 		}
 	};
 
@@ -41,27 +40,23 @@ namespace PPmatrix
 		{}
 	};
 
-	template <view View, typename Functor>
-	constexpr view transform_view(View&& v, Functor f)
+	constexpr view auto transform_view(view auto&& v, auto f)
 	{
 		return transform_iterator(begin(v), f) ^ transform_iterator(end(v), f);
 	}
 
-	template <iterator Iterator, typename Functor>
-	constexpr iterator operator&(Iterator i, transform<Functor> t)
+	constexpr iterator auto operator&(iterator auto i, transform<auto> t)
 	{
 		return transform_iterator(i, t.functor);
 	}
 
-	template <view View, typename Functor>
-	constexpr view operator||(View&& v, transform<Functor> t)
+	constexpr view auto operator||(view auto&& v, transform<auto> t)
 	{
 		return begin(v) & t ^ end(v);
 	}
 
-	template <view View, typename Functor>
-	constexpr view operator|(View&& v, transform<Functor> t)
+	constexpr view auto operator|(view auto&& v, transform<auto> t)
 	{
-		return transform_view(std::forward<View>(v), t.functor);
+		return transform_view(v, t.functor);
 	}
 }

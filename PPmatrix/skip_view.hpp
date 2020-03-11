@@ -14,7 +14,7 @@ namespace PPmatrix
 			: base_iterator(base_iterator)
 			, skip_length(skip_length)
 		{}
-		constexpr decltype(auto) operator*()
+		constexpr decltype(auto) operator*() const
 		{
 			return *base_iterator;
 		}
@@ -28,10 +28,9 @@ namespace PPmatrix
 			base_iterator -= offset * skip_length;
 			return *this;
 		}
-		template <iterator OtherIterator>
-		constexpr bool operator!=(OtherIterator other)
+		constexpr auto operator==(iterator auto other) const
 		{
-			return compare_iterator(base_iterator, other);
+			return base_iterator == other;
 		}
 
 		constexpr auto& base()
@@ -47,26 +46,22 @@ namespace PPmatrix
 			: skip_length(skip_length)
 		{}
 
-		template <view View>
-		constexpr iterator aligned_end(View&& view)
+		constexpr iterator auto aligned_end(view auto&& v)
 		{
-			return end(view) + skip_length - PPmatrix::size(view) % skip_length;
+			return end(v) + skip_length - PPmatrix::size(v) % skip_length;
 		}
 	};
 
-	template <iterator Iterator>
-	constexpr iterator operator&(Iterator i, skip s)
+	constexpr iterator auto operator&(iterator auto i, skip s)
 	{
 		return skip_iterator(i, s.skip_length);
 	}
-	template <view View>
-	constexpr view operator||(View&& view, skip s)
+	constexpr view auto operator||(view auto&& v, skip s)
 	{
-		return begin(view) & s ^ s.aligned_end(std::forward<View>(view));
+		return begin(v) & s ^ s.aligned_end(v);
 	}
-	template <view View>
-	constexpr view operator|(View&& view, skip s)
+	constexpr view auto operator|(view auto&& v, skip s)
 	{
-		return begin(view) & s ^ s.aligned_end(std::forward<View>(view)) & s;
+		return begin(v) & s ^ s.aligned_end(v) & s;
 	}
 }

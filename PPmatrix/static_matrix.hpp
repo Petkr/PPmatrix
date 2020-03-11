@@ -16,19 +16,19 @@ namespace PPmatrix
 			, data_()
 		{}
 
-		constexpr iterator begin()
+		constexpr iterator auto begin()
 		{
 			return PPmatrix::begin(data_);
 		}
-		constexpr iterator begin() const
+		constexpr iterator auto begin() const
 		{
 			return PPmatrix::begin(data_);
 		}
-		constexpr iterator end()
+		constexpr iterator auto end()
 		{
 			return PPmatrix::end(data_);
 		}
-		constexpr iterator end() const
+		constexpr iterator auto end() const
 		{
 			return PPmatrix::end(data_);
 		}

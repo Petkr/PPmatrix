@@ -15,7 +15,7 @@ namespace PPmatrix
 		constexpr static_iterator(const T& value)
 			: value(value)
 		{}
-		constexpr auto& operator*()
+		constexpr const auto& operator*() const
 		{
 			return value;
 		}
@@ -27,10 +27,14 @@ namespace PPmatrix
 		{
 			return *this;
 		}
+		constexpr auto operator==(const static_iterator<auto>& other) const
+		{
+			return value == other.value;
+		}
 	};
 
 	template <typename T>
-	constexpr view static_view(T&& value)
+	constexpr view auto static_view(T&& value)
 	{
 		return static_iterator(std::forward<T>(value)) ^ unbounded;
 	}

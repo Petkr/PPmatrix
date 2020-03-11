@@ -30,14 +30,13 @@ namespace PPmatrix
 			value += offset;
 			return *this;
 		}
-		constexpr auto operator!=(const T& other) const
+		constexpr auto operator==(const T& other) const
 		{
-			return value != other;
+			return value == other;
 		}
-		template <typename U>
-		constexpr auto operator!=(const wrap_iterator<U>& other) const
+		constexpr auto operator==(const wrap_iterator<auto>& other) const
 		{
-			return value != *other;
+			return value == *other;
 		}
 	};
 

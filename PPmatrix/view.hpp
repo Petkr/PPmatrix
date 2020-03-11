@@ -6,46 +6,67 @@
 
 namespace PPmatrix
 {
-	template <typename View>
-	requires requires (View v) { v.begin(); }
-	constexpr iterator begin(View&& view)
+	namespace detail
 	{
-		return view.begin();
+		template <typename T>
+		concept has_begin = requires (T t)
+		{
+			{ t.begin() } -> iterator;
+		};
+		template <typename T>
+		concept has_end = requires (T t)
+		{
+			t.end();
+		};
+	}
+	constexpr iterator auto begin(detail::has_begin auto&& v)
+	{
+		return v.begin();
+	}
+	constexpr auto end(detail::has_end auto&& v)
+	{
+		return v.end();
 	}
 
-	template <typename View>
-	requires requires (View v) { v.end(); }
-	constexpr iterator end(View&& view)
+	namespace detail
 	{
-		return view.end();
+		template <typename View>
+		using begin_t = decltype(begin(std::declval<View>()));
 	}
 
 	template <typename View>
 	concept view = requires (View v)
 	{
 		{ begin(v) } -> iterator;
-		{ end(v) } -> iterator;
+		{ end(v) } -> sentinel<detail::begin_t<View>>;
 	};
 
 	namespace detail
 	{
+		// workaround
 		template <typename T>
-		concept has_size = requires (const T t)
-		{
-			{ t.size() } -> std::size_t;
-		};
+		concept is_size_t = same<T, std::size_t>;
+
+		template <typename T>
+		concept view_with_size =
+			view<T> &&
+			requires (const T t)
+			{
+				{ t.size() } -> is_size_t;
+				// { t.size() } -> same<std::size_t>; // doesn't compile
+			};
 	}
-	template <view View>
-	constexpr std::size_t size(View&& view)
+	constexpr std::size_t size(view auto&& v)
 	{
-		if constexpr (detail::has_size<View>)
-			return view.size();
-		else
-			return end(view) - begin(view);
+		return end(v) - begin(v);
+	}
+	constexpr std::size_t size(detail::view_with_size auto&& v)
+	{
+		return v.size();
 	}
 
 	template <view View>
-	using begin_t = decltype(begin(std::declval<View>()));
+	using begin_t = detail::begin_t<View>;
 	template <view View>
 	using end_t = decltype(end(std::declval<View>()));
 	template <iterator Iterator>

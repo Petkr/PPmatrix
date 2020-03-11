@@ -4,34 +4,33 @@
 
 namespace PPmatrix
 {
-	template <typename T>
+	consteval std::size_t number_width(std::floating_point auto number)
+	{
+		return 1;
+	}
+	template <std::integral T>
 	constexpr std::size_t number_width(T number)
 	{
-		if constexpr (std::is_floating_point_v<T>)
-			return 1;
+		std::size_t width = 0;
+
+		if constexpr (std::unsigned_integral<T>)
+		{
+			if (number == 0)
+				++width;
+		}
 		else
 		{
-			std::size_t width = 0;
-
-			if constexpr (std::is_unsigned_v<T>)
-			{
-				if (number == 0)
-					++width;
-			}
-			else
-			{
-				if (number <= 0)
-					++width;
-			}
-
-			while (number != 0)
-			{
-				number /= 10;
+			if (number <= 0)
 				++width;
-			}
-
-			return width;
 		}
+
+		while (number != 0)
+		{
+			number /= 10;
+			++width;
+		}
+
+		return width;
 	}
 
 	namespace functor

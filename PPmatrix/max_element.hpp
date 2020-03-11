@@ -3,18 +3,16 @@
 
 namespace PPmatrix
 {
-	template <view View>
-	constexpr iterator max_element(View&& view)
+	constexpr iterator auto max_element(view auto&& v)
 	{
-		auto i = begin(view);
+		auto i = begin(v);
 		auto max = i;
-		for (; i != end(view); ++i)
+		for (; i != end(v); ++i)
 			if (*max < *i)
 				max = i;
 		return max;
 	}
-	template <typename T>
-	constexpr iterator max_element(const std::initializer_list<T>& l)
+	constexpr iterator auto max_element(const std::initializer_list<auto>& l)
 	{
 		return max_element(detail::wrap_initializer_list(l));
 	}

@@ -4,7 +4,7 @@
 namespace PPmatrix
 {
 	template <iterator BiIterator>
-	constexpr BiIterator prev(BiIterator i)
+	constexpr /*same<*/BiIterator/*> auto*/ prev(BiIterator i)
 	{
 		return --i;
 	}

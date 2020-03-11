@@ -12,18 +12,17 @@ namespace PPmatrix
 		compressed_pair<Iterator, Sentinel> pair;
 
 	public:
-		template <view View>
-		constexpr simple_view(View&& v)
+		constexpr simple_view(view auto&& v)
 			: pair{ PPmatrix::begin(v), PPmatrix::end(v) }
 		{}
 		constexpr simple_view(Iterator begin, Sentinel end)
 			: pair{ begin, end }
 		{}
-		constexpr iterator begin() const
+		constexpr iterator auto begin() const
 		{
 			return pair.first;
 		}
-		constexpr iterator end() const
+		constexpr iterator auto end() const
 		{
 			return pair.second;
 		}
@@ -31,15 +30,14 @@ namespace PPmatrix
 	template <view View>
 	simple_view(View&&) -> simple_view<begin_t<View>, end_t<View>>;
 
-	template <iterator Iterator, sentinel<Iterator> Sentinel>
-	constexpr auto operator^(Iterator begin, Sentinel end)
+	template <iterator Iterator>
+	constexpr view auto operator^(Iterator begin, sentinel<Iterator> auto end)
 	{
 		return simple_view(begin, end);
 	}
 
-	template <view View>
-	constexpr auto operator|(View&& view, unbounded_t)
+	constexpr view auto operator|(view auto&& v, unbounded_t)
 	{
-		return begin(view) ^ unbounded;
+		return begin(v) ^ unbounded;
 	}
 }

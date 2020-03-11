@@ -26,19 +26,19 @@ namespace PPmatrix
 			, data_(width_* height)
 		{}
 
-		iterator begin()
+		iterator auto begin()
 		{
 			return PPmatrix::begin(data_);
 		}
-		iterator begin() const
+		iterator auto begin() const
 		{
 			return PPmatrix::begin(data_);
 		}
-		iterator end()
+		iterator auto end()
 		{
 			return PPmatrix::end(data_);
 		}
-		iterator end() const
+		iterator auto end() const
 		{
 			return PPmatrix::end(data_);
 		}

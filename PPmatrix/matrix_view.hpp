@@ -6,28 +6,33 @@ namespace PPmatrix
 	namespace detail
 	{
 		template <typename T>
-		concept has_width = requires (const T t)
-		{
-			{ t.width() } -> std::size_t;
-		};
+		concept view_with_width =
+			view<T> &&
+			requires (const T t)
+			{
+				{ t.width() } -> is_size_t;
+				// { t.width() } -> same<std::size_t>; // doesn't compile
+			};
 	}
-	template <view MatrixView>
-	constexpr std::size_t width(const MatrixView& matrix)
+
+	consteval std::size_t width(view auto&&)
 	{
-		if constexpr (detail::has_width<MatrixView>)
-			return matrix.width();
-		else
-			return 1;
+		return 1;
 	}
+	constexpr std::size_t width(detail::view_with_width auto&& matrix)
+	{
+		return matrix.width();
+	}
+
 	template <typename MatrixView>
-	concept matrix_view = view<MatrixView> &&
+	concept matrix_view =
+		view<MatrixView> &&
 		requires (const MatrixView mv)
 		{
-			{ width(mv) } -> std::size_t;
+			{ width(mv) } -> same<std::size_t>;
 		};
 
-	template <matrix_view MatrixView>
-	constexpr std::size_t height(const MatrixView& matrix)
+	constexpr std::size_t height(matrix_view auto&& matrix)
 	{
 		return PPmatrix::size(matrix) / width(matrix);
 	}

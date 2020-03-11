@@ -3,27 +3,23 @@
 
 namespace PPmatrix
 {
-	template <typename Function, view ViewV, view ViewW>
-	constexpr void zip(ViewV&& v, ViewW&& w, Function f)
+	constexpr void zip(view auto&& v, view auto&& w, auto f)
 	{
 		auto i = begin(v);
 		auto j = begin(w);
 		for (; i != end(v) && j != end(w); ++i, ++j)
 			f(*i, *j);
 	}
-	template <typename Function, typename T, view ViewW>
-	constexpr void zip(const std::initializer_list<T>& l, ViewW&& w, Function f)
+	constexpr void zip(const std::initializer_list<auto>& l, view auto&& w, auto f)
 	{
-		zip(detail::wrap_initializer_list(l), std::forward<ViewW>(w), f);
+		zip(detail::wrap_initializer_list(l), w, std::move(f));
 	}
-	template <typename Function, view ViewV, typename T>
-	constexpr void zip(ViewV&& v, const std::initializer_list<T>& l, Function f)
+	constexpr void zip(view auto&& v, const std::initializer_list<auto>& l, auto f)
 	{
-		zip(std::forward<ViewV>(v), detail::wrap_initializer_list(l), f);
+		zip(v, detail::wrap_initializer_list(l), std::move(f));
 	}
-	template <typename Function, typename T, typename U>
-	constexpr void zip(const std::initializer_list<T>& l, const std::initializer_list<U>& m, Function f)
+	constexpr void zip(const std::initializer_list<auto>& l, const std::initializer_list<auto>& m, auto f)
 	{
-		zip(detail::wrap_initializer_list(l), detail::wrap_initializer_list(m), f);
+		zip(detail::wrap_initializer_list(l), detail::wrap_initializer_list(m), std::move(f));
 	}
 }

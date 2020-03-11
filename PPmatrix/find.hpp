@@ -3,16 +3,14 @@
 
 namespace PPmatrix
 {
-	template <view View, typename UnaryPredicate>
-	constexpr iterator find(View&& view, UnaryPredicate p)
+	constexpr iterator auto find(view auto&& view, auto p)
 	{
 		auto i = begin(view);
 		for (; i != end(view) && !p(*i); ++i);
 		return i;
 	}
 
-	template <typename T, typename UnaryPredicate>
-	constexpr iterator find(const std::initializer_list<T>& l, UnaryPredicate p)
+	constexpr iterator auto find(const std::initializer_list<auto>& l, auto p)
 	{
 		return find(detail::wrap_initializer_list(l), std::move(p));
 	}

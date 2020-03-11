@@ -15,7 +15,7 @@ namespace PPmatrix
 			, count(count)
 		{}
 
-		constexpr decltype(auto) operator*()
+		constexpr decltype(auto) operator*() const
 		{
 			return *base_iterator;
 		}
@@ -26,10 +26,9 @@ namespace PPmatrix
 				count -= offset;
 			return *this;
 		}
-		template <iterator OtherIterator>
-		constexpr bool operator!=(OtherIterator i) const
+		constexpr auto operator==(iterator auto other) const
 		{
-			return compare_iterator(base_iterator, i) && count != 0;
+			return count == 0 || base_iterator == other;
 		}
 	};
 
@@ -41,30 +40,25 @@ namespace PPmatrix
 		{}
 	};
 
-	template <iterator Iterator>
-	constexpr view take_view(Iterator i, std::size_t n)
+	constexpr view auto take_view(iterator auto i, std::size_t n)
 	{
 		return take_iterator(i, n) ^ unbounded;
 	}
-	template <view View>
-	constexpr view take_view(View&& v, std::size_t n)
+	constexpr view auto take_view(view auto&& v, std::size_t n)
 	{
 		return take_iterator(begin(v), n) ^ end(v);
 	}
 
-	template <typename Iterator>
-	constexpr iterator operator&(Iterator i, take t)
+	constexpr iterator auto operator&(iterator auto i, take t)
 	{
 		return take_iterator(i, t.count);
 	}
-	template <view View>
-	constexpr view operator||(View&& v, take t)
+	constexpr view auto operator||(view auto&& v, take t)
 	{
 		return take_view(begin(v), t.count);
 	}
-	template <view View>
-	constexpr view operator|(View&& v, take t)
+	constexpr view auto operator|(view auto&& v, take t)
 	{
-		return take_view(std::forward<View>(v), t.count);
+		return take_view(v, t.count);
 	}
 }

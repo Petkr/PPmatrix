@@ -37,7 +37,7 @@ namespace PPmatrix
 			right_iterator += rows * right_width;
 		}
 
-		template <typename, typename>
+		template <iterator, iterator>
 		friend class augmented_matrix_view_iterator;
 
 	public:
@@ -51,7 +51,7 @@ namespace PPmatrix
 			, left_active(true)
 		{}
 
-		constexpr decltype(auto) operator*()
+		constexpr decltype(auto) operator*() const
 		{
 			if (left_active)
 				return *left_iterator;
@@ -136,31 +136,31 @@ namespace PPmatrix
 			return *this;
 		}
 		template <iterator LeftIteratorOther, iterator RightIteratorOther>
-		constexpr bool operator!=(const augmented_matrix_view_iterator<LeftIteratorOther, RightIteratorOther>& other) const
+		constexpr bool operator==(const augmented_matrix_view_iterator<LeftIteratorOther, RightIteratorOther>& other) const
 		{
 			if (left_active == other.left_active)
 			{
 				if (left_active)
-					return compare_iterator(left_iterator, other.left_iterator);
+					return left_iterator == other.left_iterator;
 				else
-					return compare_iterator(right_iterator, other.right_iterator);
+					return right_iterator == other.right_iterator;
 			}
-			return true;
+			return false;
 		}
 		template <iterator Iterator>
-		constexpr bool operator!=(Iterator other) const
+		constexpr bool operator==(Iterator other) const
 		{
 			if (left_active)
 			{
-				if constexpr (sentinel<Iterator, LeftIterator> || sentinel<LeftIterator, Iterator>)
-					return compare_iterator(left_iterator, other);
+				if constexpr (sentinel<Iterator, LeftIterator>)
+					return left_iterator == other;
 			}
 			else
 			{
-				if constexpr (sentinel<Iterator, RightIterator> || sentinel<RightIterator, Iterator>)
-					return compare_iterator(right_iterator, other);
+				if constexpr (sentinel<Iterator, RightIterator>)
+					return right_iterator == other;
 			}
-			return true;
+			return false; //shouldn't happen
 		}
 	};
 
@@ -174,26 +174,32 @@ namespace PPmatrix
 		RightMatrixView right;
 
 	public:
-		template <matrix_view LeftMatrixViewAny, matrix_view RightMatrixViewAny>
-		augmented_matrix_view(LeftMatrixViewAny&& left, RightMatrixViewAny&& right)
-			: augmented_matrix_view(std::forward<LeftMatrixViewAny>(left), std::forward<RightMatrixViewAny>(right), dont_check_heights_tag)
+		augmented_matrix_view(matrix_view auto&& left, matrix_view auto&& right)
+			: augmented_matrix_view(left, right, dont_check_heights_tag)
 		{
 			if (height(left) != height(right))
 				throw "incompatible heights";
 		}
-		template <matrix_view LeftMatrixViewAny, matrix_view RightMatrixViewAny>
-		augmented_matrix_view(LeftMatrixViewAny&& left, RightMatrixViewAny&& right, dont_check_heights_tag_t)
+		augmented_matrix_view(matrix_view auto&& left, matrix_view auto&& right, dont_check_heights_tag_t)
 			: left(simple_matrix_view(left))
 			, right(simple_matrix_view(right))
 		{}
 
-		iterator begin() const
+		iterator auto begin() const
 		{
-			return augmented_matrix_view_iterator(PPmatrix::begin(left), PPmatrix::width(left), PPmatrix::begin(right), PPmatrix::width(right));
+			return augmented_matrix_view_iterator(
+				PPmatrix::begin(left),
+				PPmatrix::width(left),
+				PPmatrix::begin(right),
+				PPmatrix::width(right));
 		}
-		iterator end() const
+		iterator auto end() const
 		{
-			return augmented_matrix_view_iterator(PPmatrix::end(left), PPmatrix::width(left), PPmatrix::end(right), PPmatrix::width(right));
+			return augmented_matrix_view_iterator(
+				PPmatrix::end(left),
+				PPmatrix::width(left),
+				PPmatrix::end(right),
+				PPmatrix::width(right));
 		}
 		std::size_t width() const
 		{
@@ -204,9 +210,8 @@ namespace PPmatrix
 			return PPmatrix::size(left) + PPmatrix::size(right);
 		}
 	};
-	template <matrix_view LeftMatrixViewAny, matrix_view RightMatrixViewAny>
-	augmented_matrix_view(LeftMatrixViewAny&& left, RightMatrixViewAny&& right)
-		->augmented_matrix_view<
+	augmented_matrix_view(matrix_view auto&& left, matrix_view auto&& right)
+		-> augmented_matrix_view<
 		decltype(simple_matrix_view(left)),
 		decltype(simple_matrix_view(right))>;
 }

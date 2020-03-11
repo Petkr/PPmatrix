@@ -4,7 +4,7 @@
 namespace PPmatrix
 {
 	template <iterator ForwardIterator>
-	constexpr ForwardIterator next(ForwardIterator i)
+	constexpr /*same<*/ForwardIterator/*> auto*/ next(ForwardIterator i)
 	{
 		return ++i;
 	}

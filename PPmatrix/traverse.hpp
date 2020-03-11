@@ -2,9 +2,9 @@
 
 namespace PPmatrix
 {
-	template <view View>
-	constexpr void traverse(View&& view)
+	constexpr void traverse(view auto&& view)
 	{
-		for (auto&& x : view) (void)x;
+		for (auto&& x : view)
+			(void)x;
 	}
 }
