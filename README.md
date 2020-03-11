@@ -17,28 +17,31 @@ Knižnica pre prácu s maticami inšpirovaná a čiastočne využívajúca Range
 
 Knižnica implementuje všetky maticové operácie ako nečlenské šablónové funkcie.
 
-Definuje "myšlienkové koncepty" `View` a `MatrixView`, ktoré tieto funkcie používajú.\
-Nedefinuje `View` a `MatrixView` ako concept z C++20, hoci by to bolo možné.\
-Typ `T` spĺňa koncept `View`, ak sa na jeho objekt `V` dajú zavolať funkcie `begin(V)` a `end(V)`.\
-Typ `T` spĺňa koncept `MatrixView`, ak spĺňa `View` a na jeho objekt `M` sa dá zavolať funkcia `width(M)`.
-Knižnica predpokladá, že typy spĺňajúce `MatrixView` majú prvky uložené *po riadkoch*.
+Definuje koncepty
+[`view`](reference.md#view)
+a
+[`matrix_view`](reference.md#matrix_view)
+, ktoré tieto funkcie používajú.
 
-Implementuje generické algoritmy pracujúce s konceptom `View` (napr. [`PPmatrix::copy`](reference.md#copy)).
+Knižnica predpokladá, že typy spĺňajúce
+[`matrix_view`](reference.md#matrix_view)
+majú prvky uložené *po riadkoch*.
 
-Umožňuje syntax z funkčného programovania aj s lazy evaluation ako v Ranges:
+Implementuje generické algoritmy pracujúce s konceptom `view`
+(napr. [`PPmatrix::copy`](reference.md#copy)).
 
-```
+Poskytuje funkčné programovanie s lazy evaluation ako v Ranges:
+
+```cpp
 std::array<int, 6> a = { 1, 4, 6, 2, -5 };
-std::cout << *max_element(a | transform([](auto&& x) { return x * 2; }));
+transform multiplier = [](auto&& x) { return x * 2; };
+std::cout << *max_element(a | multiplier);
+// vypíše 12
 ```
-
-výstup:
-
-`12`
 
 ## Príklad
 
-```
+```cpp
 PPmatrix::dynamic_matrix<int> A(2, 2);
 PPmatrix::copy({ 1, 2, 1, 3 }, A);
 
@@ -69,14 +72,15 @@ výstup:
 
 Knižnica na niektorých miestach ticho predpokladá, že iteratory sú random access.
 Napríklad na všetkých wrapper iteratoroch implementuje iba `operator+=`
-a v [operators.hpp](PPmatrix/operators.hpp) implementuje `operator++`
-ako volanie `operator+=` s argumentom 1.
+a v [operators.hpp](PPmatrix/operators.hpp)
+implementuje `operator++` ako volanie `operator+=` s argumentom 1.
 
-Iterator, ktorý používa [`augmented_matrix_view`](reference.md#augmented_matrix_view), je na iterator *obrovský*.
-Na 64-bit s internými iteratormi `T*` má 56B.
+Iterator, ktorý používa
+[`augmented_matrix_view`](reference.md#augmented_matrix_view),
+je na iterator *obrovský*. Na 64-bit s internými iteratormi `T*` má 56B.
 
-[`augmented_matrix_view`](reference.md#augmented_matrix_view) má hlúpo implementovaný `operator+=`,
-ktorý pre `x += n` volá n-krát `++x`.
+[`augmented_matrix_view`](reference.md#augmented_matrix_view)
+má hlúpo implementovaný `operator+=`, ktorý pre `x += n` volá n-krát `++x`.
 
 ## Licencia
 
