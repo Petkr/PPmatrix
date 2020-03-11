@@ -12,6 +12,10 @@ int main()
 	PPmatrix::dynamic_matrix<int> A(2, 2);
 	PPmatrix::copy({ 1, 2, 1, 3 }, A);
 
+	PPmatrix::transpose(A);
+	PPmatrix::pretty_print(std::cout, A);
+	PPmatrix::transpose(A);
+
 	PPmatrix::static_matrix<int, 2> b(1);
 	PPmatrix::copy({ 10, 13 }, b);
 
@@ -33,6 +37,6 @@ int main()
 		0, 3, 9, 7, 3, 2 }, C);
 
 	std::cout << PPmatrix::determinant(C) << std::endl;
-	
+
 	return 0;
 }
