@@ -104,7 +104,7 @@ concept matrix_view =
 	view<MatrixView> &&
 	requires (const MatrixView mv)
 	{
-		{ width(mv) } -> same<std::size_t>;
+		{ width(mv) } -> same<size_t>;
 	};
 ```
 
@@ -115,12 +115,8 @@ concept matrix_view =
 (1)
 
 ```cpp
-template <
-	std::size_t flags = flag::none,
-	matrix_view MatrixViewA,
-	matrix_view MatrixViewB,
-	matrix_view MatrixViewResult>
-constexpr void multiply(const MatrixViewA& A, const MatrixViewB& B, MatrixViewResult& result);
+template <size_t flags = flag::none>
+constexpr void multiply(matrix_view auto&& A, matrix_view auto&& B, matrix_view auto&& result);
 ```
 
 Násobí maticu `A` maticou `B`. Výsledok uloží do matice `result`.
@@ -130,10 +126,7 @@ Násobí maticu `A` maticou `B`. Výsledok uloží do matice `result`.
 (2)
 
 ```cpp
-template <
-	matrix_view MatrixView,
-	typename T>
-constexpr void multiply(MatrixView& matrix, const T& scalar);
+constexpr void multiply(matrix_view auto&& matrix, const auto& scalar);
 ```
 
 Násobí maticu `matrix` skalárom `scalar`.
@@ -141,11 +134,8 @@ Násobí maticu `matrix` skalárom `scalar`.
 ### add
 
 ```cpp
-template <
-	std::size_t flags = flag::none,
-	matrix_view MatrixViewA,
-	matrix_view MatrixViewB>
-constexpr MatrixViewA& add(MatrixViewA& A, const MatrixViewB& B);
+template <size_t flags = flag::none>
+constexpr auto& add(matrix_view auto&& A, matrix_view auto&& B);
 ```
 
 Pripočíta k matici `A` maticu `B`. Vráti `A` po pričítaní.
@@ -157,13 +147,11 @@ Pripočíta k matici `A` maticu `B`. Vráti `A` po pričítaní.
 (1)
 
 ```cpp
-template <
-	bool const_square = false,
-	matrix_view MatrixView>
-constexpr void transpose(MatrixView& matrix, bool square);
+template <bool const_square = false>
+constexpr void transpose(matrix_view auto&& matrix, bool square);
 ```
 
-Vráti transponovanú maticu `matrix`.
+Transponuje maticu `matrix`.
 
 Ak je `const_square` alebo `square` `true`,
 transponuje, akoby bola `matrix` štvorcová matica.\
@@ -175,11 +163,11 @@ Inak použije
 (2)
 
 ```cpp
-template <bool const_square = false, typename MatrixView>
-constexpr void transpose(MatrixView& matrix);
+template <bool const_square = false>
+constexpr void transpose(matrix_view auto&& matrix);
 ```
 
-Vráti transponovanú maticu `matrix`.
+Transponuje maticu `matrix`.
 
 `transpose<true>(matrix)` volá `transpose<true>(matrix, _)`.\
 `transpose<false>(matrix)` volá `transpose<true>(matrix, is_square(matrix))`.
@@ -189,10 +177,8 @@ Vráti transponovanú maticu `matrix`.
 (1)
 
 ```cpp
-template <
-	std::size_t flags = flag::none,
-	matrix_view MatrixView>
-constexpr auto determinant(MatrixView& matrix, bool triangular);
+template <size_t flags = flag::none>
+constexpr auto determinant(matrix_view auto&& matrix, bool triangular);
 ```
 
 Vráti determinant matice `matrix`.
@@ -208,10 +194,8 @@ Ak má `flags` nastavené `flags::triangular`, `determinant<flags>(matrix, b)` i
 (2)
 
 ```cpp
-template <
-	flag::bitmask flags = flag::none,
-	matrix_view MatrixView>
-constexpr auto determinant(MatrixView& matrix);
+template <flag::bitmask flags = flag::none>
+constexpr auto determinant(matrix_view auto&& matrix);
 ```
 
 Vráti determinant matice `matrix`.
@@ -224,11 +208,8 @@ Inak volá `determinant<flags>(matrix, is_triangular(matrix))`.
 ### solve_linear_equations
 
 ```cpp
-template <
-	flag::bitmask flags = flag::none,
-	matrix_view MatrixView,
-	matrix_view MatrixViewVector>
-constexpr std::make_signed<std::size_t> solve_linear_equations(MatrixView& M, MatrixViewVector& v);
+template <flag::bitmask flags = flag::none>
+constexpr std::make_signed<size_t> solve_linear_equations(matrix_view auto&& M, matrix_view auto&& v);
 ```
 
 Pre rovnicu `Mb = v`:
@@ -246,9 +227,8 @@ Ak existuje práve jedno riešenie, uloží ho do `v`, inak nechá prvky `v` v n
 template <
 	bool reduced = false,
 	bool calculate_determinant = false,
-	bool calculate_rank = false,
-	matrix_view MatrixView>
-constexpr auto REF(MatrixView& matrix);
+	bool calculate_rank = false>
+constexpr auto REF(matrix_view auto&& matrix);
 ```
 
 Upraví maticu `matrix` do (R)REF.
@@ -270,16 +250,16 @@ Základné containery, ktoré spĺňajú `matrix_view`.
 ```cpp
 template <
 	typename T,
-	std::size_t size>
+	size_t size>
 class static_matrix
 {
-	constexpr explicit static_matrix(std::size_t width);
+	constexpr explicit static_matrix(size_t width);
 
 	constexpr iterator auto begin();
 	constexpr iterator auto begin() const;
 	constexpr iterator auto end();
 	constexpr iterator auto end() const;
-	constexpr std::size_t width() const;
+	constexpr size_t width() const;
 };
 ```
 
@@ -291,15 +271,15 @@ Container so statickou veľkosťou spĺňajúci `matrix_view`.
 template <typename T>
 class dynamic_matrix
 {
-	dynamic_matrix(std::size_t height, std::size_t width);
+	dynamic_matrix(size_t height, size_t width);
 
 	iterator auto begin();
 	iterator auto begin() const;
 	iterator auto end();
 	iterator auto end() const;
-	std::size_t width() const;
-	void resize(std::size_t new_height);
-	void resize(std::size_t new_width, resize_columns_tag_t);
+	size_t width() const;
+	void resize(size_t new_height);
+	void resize(size_t new_width, resize_columns_tag_t);
 };
 ```
 
@@ -316,8 +296,7 @@ Container s dynamickou veľkosťou spĺňajúci `matrix_view`.
 	class simple_view
 	{
 	public:
-		template <view View>
-		constexpr simple_view(View&& v);
+		constexpr simple_view(view auto&& v);
 		constexpr simple_view(Iterator begin, Sentinel end);
 
 		constexpr iterator auto begin() const;
@@ -336,15 +315,13 @@ template <
 class simple_matrix_view
 {
 public:
-	template <view View>
-	constexpr simple_matrix_view(View&& v, std::size_t width);
-	template <matrix_view MatrixView>
-	constexpr simple_matrix_view(MatrixView&& v);
-	constexpr simple_matrix_view(Iterator begin, Sentinel end, std::size_t width);
+	constexpr simple_matrix_view(view auto&& v, size_t width);
+	constexpr simple_matrix_view(matrix_view auto&& v);
+	constexpr simple_matrix_view(Iterator begin, Sentinel end, size_t width);
 	constexpr iterator begin() const;
 	constexpr iterator end() const;
-	constexpr std::size_t width() const;
-	constexpr void set_width(std::size_t width);
+	constexpr size_t width() const;
+	constexpr void set_width(size_t width);
 };
 ```
 
@@ -358,29 +335,14 @@ template <
 	typename RightMatrixView>
 class augmented_matrix_view
 {
-	template <
-		matrix_view LeftMatrixViewAny,
-		matrix_view RightMatrixViewAny>
-	augmented_matrix_view(LeftMatrixViewAny&& A, RightMatrixViewAny&& B);
+	augmented_matrix_view(matrix_view auto&& left, matrix_view auto&& right);
+	augmented_matrix_view(matrix_view auto&& left, matrix_view auto&& right, dont_check_heights_tag_t);
 
-	template <
-		matrix_view LeftMatrixViewAny,
-		matrix_view RightMatrixViewAny>
-	augmented_matrix_view(LeftMatrixViewAny&& left, RightMatrixViewAny&& right, dont_check_heights_tag_t);
-
-	iterator begin() const;
-	iterator end() const;
-	std::size_t width() const;
-	std::size_t size() const;
+	iterator auto begin() const;
+	iterator auto end() const;
+	size_t width() const;
+	size_t size() const;
 };
-
-template <
-	matrix_view LeftMatrixViewAny,
-	matrix_view RightMatrixViewAny>
-augmented_matrix_view(LeftMatrixViewAny&& A, RightMatrixViewAny&& B)
-->	augmented_matrix_view<
-	decltype(simple_matrix_view(A)),
-	decltype(simple_matrix_view(B))>;
 ```
 
 Reprezentuje
@@ -395,7 +357,6 @@ Keďže výraz `{1, 2, 3}` nemá v C++ typ, kompilátor nedokáže vydedukovať 
 
 Algoritmy, ktoré akceptujú `view` na konštantné prvky majú teda navyše overloady pre `std::initializer_list`.
 
-
 ### accumulate
 
 (1)
@@ -403,9 +364,8 @@ Algoritmy, ktoré akceptujú `view` na konštantné prvky majú teda navyše ove
 ```cpp
 template <
 	view View,
-	typename BinaryFunction,
 	typename T = view_base_t<View>>
-constexpr T accumulate(const View& v, BinaryFunction f, T init = {});
+constexpr T accumulate(View&& v, auto f, T init = {});
 ```
 
 Vráti ľavý fold `v` cez binárnu funkciu `f` s počiatočnou hodnotou `init`.
@@ -418,9 +378,8 @@ vráti `f(f(f(f(init, 1), 2), 5), 9)`.
 ```cpp
 template <
 	typename T,
-	typename BinaryFunction,
-	typename U = view_base_t<std::initializer_list<T>>>
-constexpr U accumulate(const std::initializer_list<T>& l, BinaryFunction f, U init = {});
+	typename U = T>
+constexpr U accumulate(const std::initializer_list<T>& l, auto f, U init = {});
 ```
 
 Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
@@ -430,10 +389,7 @@ Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
 (1)
 
 ```cpp
-template <
-	view ViewFrom,
-	view ViewTo>
-constexpr void copy(const ViewFrom& from, ViewTo&& to);
+constexpr void copy(view auto&& from, view auto&& to);
 ```
 
 Nakopíruje `from` do `to` po prvkoch pomocou `operator=`.
@@ -443,10 +399,7 @@ Počet volaní `operator=` je rovný `std::min(PPmatrix::size(from), PPmatrix::s
 (2)
 
 ```cpp
-template <
-	typename T,
-	view ViewTo>
-constexpr void copy(const std::initializer_list<T>& from, ViewTo&& to);
+constexpr void copy(const std::initializer_list<auto>& from, view auto&& to);
 ```
 
 Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
@@ -456,10 +409,7 @@ Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
 (1)
 
 ```cpp
-template <
-	view View1,
-	view View2>
-constexpr bool equal(View1&& view1, View2&& view2);
+constexpr bool equal(view auto&& view1, view auto&& view2);
 ```
 
 Určí, či sú `view1` a `view2` zhodné po prvkoch podľa `operator==`.
@@ -469,10 +419,7 @@ Z oboch `view` porovnáva iba prvých `std::min(PPmatrix::size(view1), PPmatrix:
 (2)
 
 ```cpp
-template <
-	typename T,
-	view View2>
-constexpr bool equal(const std::initializer_list<T>& l, View2&& view2);
+constexpr bool equal(const std::initializer_list<auto>& l, view auto&& view2);
 ```
 
 Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
@@ -480,10 +427,7 @@ Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
 (3)
 
 ```cpp
-template <
-	view View1,
-	typename T>
-constexpr bool equal(View1&& view1, const std::initializer_list<T>& l);
+constexpr bool equal(view auto&& view1, const std::initializer_list<auto>& l);
 ```
 
 Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
@@ -491,10 +435,7 @@ Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
 (4)
 
 ```cpp
-template <
-	typename T,
-	typename U>
-constexpr bool equal(const std::initializer_list<T>& l, const std::initializer_list<U>& m);
+constexpr bool equal(const std::initializer_list<auto>& l, const std::initializer_list<auto>& m);
 ```
 
 Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
@@ -502,10 +443,7 @@ Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
 ### fill
 
 ```cpp
-template <
-	view View,
-	typename T>
-constexpr void fill(View&& view, const T& value);
+constexpr void fill(view auto&& view, const auto& value);
 ```
 
 ### find
@@ -513,10 +451,7 @@ constexpr void fill(View&& view, const T& value);
 (1)
 
 ```cpp
-template <
-	view View,
-	typename UnaryPredicate>
-constexpr iterator find(View&& v, UnaryPredicate p);
+constexpr iterator auto find(view auto&& v, auto p);
 ```
 
 Ak existuje element `x` vo `v`, pre ktorý `p(x)` vráti `true`, vráti iterator na prvý taký.\
@@ -525,10 +460,7 @@ Inak vráti iterator rovný `PPmatrix::end(view)`.
 (2)
 
 ```cpp
-template <
-	typename T,
-	typename UnaryPredicate>
-constexpr iterator find(const std::initializer_list<T>& l, UnaryPredicate p);
+constexpr iterator auto find(const std::initializer_list<auto>& l, auto p);
 ```
 
 Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
@@ -542,7 +474,7 @@ template <
 	view View1,
 	view View2,
 	typename T = detail::accumulator_t<View1, View2>>
-constexpr T inner_product(const View1& view1, const View2& view2, T init = {});
+constexpr T inner_product(View1&& view1, View2&& view2, T init = {});
 ```
 
 Vráti súčet `init` a súčinov prvkov `view1` a `view2`.
@@ -554,7 +486,7 @@ template <
 	typename T,
 	view View2,
 	typename U = detail::accumulator_t<std::initializer_list<T>, View2>>
-constexpr U inner_product(const std::initializer_list<T>& l, const View2& view2, U init = {});
+constexpr U inner_product(const std::initializer_list<T>& l, View2&& view2, U init = {});
 ```
 
 Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
@@ -566,7 +498,7 @@ template <
 	view View1,
 	typename T,
 	typename U = detail::accumulator_t<View1, std::initializer_list<T>>>
-constexpr U inner_product(const View1& view1, const std::initializer_list<T>& l, U init = {});
+constexpr U inner_product(View1&& view1, const std::initializer_list<T>& l, U init = {});
 ```
 
 Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
@@ -588,8 +520,7 @@ Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
 (1)
 
 ```cpp
-template <view View>
-constexpr iterator max_element(View&& v);
+constexpr iterator max_element(view auto&& v);
 ```
 
 Vráti iterator na najväčší prvok vo `v`.
@@ -597,8 +528,7 @@ Vráti iterator na najväčší prvok vo `v`.
 (2)
 
 ```cpp
-template <typename T>
-constexpr iterator max_element(const std::initializer_list<T>& l);
+constexpr iterator max_element(const std::initializer_list<auto>& l);
 ```
 
 Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
@@ -606,10 +536,7 @@ Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
 ### swap_ranges
 
 ```cpp
-template <
-	view View1,
-	view View2>
-constexpr void swap_ranges(View1&& view1, View2&& view2);
+constexpr void swap_ranges(view auto&& view1, view auto&& view2);
 ```
 
 Prehodí prvky `view1` a `view2` použitím `std::swap`.
@@ -619,11 +546,7 @@ Prehodí prvky `view1` a `view2` použitím `std::swap`.
 (1)
 
 ```cpp
-template <
-	typename Function,
-	view ViewV,
-	view ViewW>
-constexpr void zip(ViewV&& v, ViewW&& w, Function f);
+constexpr void zip(view auto&& v, view auto&& w, auto f);
 ```
 
 Zavolá `f` na jednotlivé prvky `v` a `w`. Teda pre prvky `a` a `b` zavolá `f(a, b)`.
@@ -633,11 +556,7 @@ Počet volaní `f` je rovný `std::min(PPmatrix::size(v), PPmatrix::size(w))`.
 (2)
 
 ```cpp
-template <
-	typename Function,
-	typename T,
-	view ViewW>
-constexpr void zip(const std::initializer_list<T>& l, ViewW&& w, Function f);
+constexpr void zip(const std::initializer_list<auto>& l, view auto&& w, auto f);
 ```
 
 Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
@@ -645,11 +564,7 @@ Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
 (3)
 
 ```cpp
-template <
-	typename Function,
-	view ViewV,
-	typename T>
-constexpr void zip(ViewV&& v, const std::initializer_list<T>& l, Function f);
+constexpr void zip(view auto&& v, const std::initializer_list<auto>& l, auto f);
 ```
 
 Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
@@ -657,11 +572,7 @@ Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
 (4)
 
 ```cpp
-template <
-	typename Function,
-	typename T,
-	typename U>
-constexpr void zip(const std::initializer_list<T>& l, const std::initializer_list<U>& m, Function f);
+constexpr void zip(const std::initializer_list<auto>& l, const std::initializer_list<auto>& m, auto f);
 ```
 
 Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
@@ -675,19 +586,18 @@ template <iterator BaseIterator>
 class skip_iterator
 {
 public:
-	constexpr skip_iterator(BaseIterator base_iterator, std::size_t skip_length);
+	constexpr skip_iterator(BaseIterator base_iterator, size_t skip_length);
 
-	constexpr decltype(auto) operator*();
-	constexpr auto& operator+=(std::size_t offset);
-	constexpr auto& operator-=(std::size_t offset);
-	constexpr auto operator!=(BaseIterator other);
-	constexpr auto operator!=(skip_iterator other);
+	constexpr decltype(auto) operator*() const;
+	constexpr auto& operator+=(size_t offset);
+	constexpr auto& operator-=(size_t offset);
+	constexpr bool operator==(iterator auto other) const;
 	constexpr auto& base();
 };
 
 struct skip
 {
-	skip(std::size_t skip_length);
+	skip(size_t skip_length);
 };
 ```
 
@@ -706,11 +616,10 @@ class transform_iterator
 public:
 	constexpr transform_iterator(BaseIterator base_iterator, Transform t);
 
-	constexpr decltype(auto) operator*();
-	constexpr auto& operator+=(std::size_t offset);
-	constexpr auto& operator-=(std::size_t offset);
-	template <iterator OtherIterator>
-	constexpr bool operator!=(OtherIterator other_iterator) const;
+	constexpr decltype(auto) operator*() const;
+	constexpr auto& operator+=(size_t offset);
+	constexpr auto& operator-=(size_t offset);
+	constexpr bool operator==(iterator auto other) const;
 };
 
 template <typename Functor>
@@ -734,9 +643,10 @@ public:
 	constexpr static_iterator(T&& value);
 	constexpr static_iterator(const T& value);
 
-	constexpr auto& operator*();
-	constexpr auto& operator+=(std::size_t);
-	constexpr auto& operator-=(std::size_t);
+	constexpr const auto& operator*() const;
+	constexpr auto& operator+=(size_t);
+	constexpr auto& operator-=(size_t);
+	constexpr bool operator==(const static_iterator<auto>& other) const
 };
 ```
 
@@ -747,7 +657,7 @@ Jeho `operator+=` nerobí nič a `operator*` vracia obalený objekt.
 
 ```cpp
 template <typename T>
-constexpr view static_view(T&& value)
+constexpr view auto static_view(T&& value)
 ```
 
 Wrapper, ktorý vracia object spĺňajúci `view`.
@@ -765,10 +675,10 @@ public:
 
 	constexpr auto& operator*();
 	constexpr const auto& operator*() const;
-	constexpr auto& operator+=(std::size_t offset);
-	constexpr bool operator!=(const T& other) const;
-	template <typename U>
-	constexpr bool operator!=(const wrap_iterator<U>& other) const;
+	constexpr auto& operator+=(size_t offset);
+	constexpr auto& operator-=(size_t offset);
+	constexpr bool operator==(const T& other) const;
+	constexpr bool operator==(const wrap_iterator<auto>& other) const;
 };
 ```
 
@@ -776,14 +686,12 @@ Pre `wrap_iterator wi(x)`:\
 `wi += n` volá `x += n`\
 `*wi` vracia `x`.
 
-
 ##### wrap_view
 
 (1)
 
 ```cpp
-template <typename T, typename U>
-constexpr view wrap_view(T&& begin, U&& end);
+constexpr view auto wrap_view(auto&& begin, auto&& end);
 ```
 
 Vracia [`view`](#view), ktorý má begin a end typu [`wrap_iterator`](#wrap_iterator).
@@ -791,8 +699,7 @@ Vracia [`view`](#view), ktorý má begin a end typu [`wrap_iterator`](#wrap_iter
 (2)
 
 ```cpp
-template <typename T>
-constexpr view wrap_view(T&& begin);
+constexpr view auto wrap_view(auto&& begin);
 ```
 
 Vracia [`unbounded`](#unbounded) [`view`](#view), ktorý má begin typu
@@ -805,12 +712,12 @@ template <iterator BaseIterator>
 class take_iterator
 {
 public:
-	constexpr take_iterator(BaseIterator base_iterator, std::size_t count);
+	constexpr take_iterator(BaseIterator base_iterator, size_t count);
 
-	constexpr decltype(auto) operator*();
-	constexpr auto& operator+=(std::size_t offset);
-	template <typename OtherIterator>
-	constexpr bool operator!=(OtherIterator i) const;
+	constexpr decltype(auto) operator*() const;
+	constexpr auto& operator+=(size_t offset);
+	constexpr auto& operator-=(size_t offset);
+	constexpr bool operator==(iterator auto i) const;
 };
 ```
 
@@ -821,7 +728,7 @@ Iterator, ktorý sám simuluje `view`, ktorý si namiesto end pamätá svoju ve�
 ```cpp
 struct take
 {
-	constexpr take(std::size_t count);
+	constexpr take(size_t count);
 };
 ```
 
@@ -830,8 +737,7 @@ Pozri [použitie]().
 ##### take_view
 
 ```cpp
-template <typename Iterator>
-constexpr view take_view(Iterator i, std::size_t n);
+constexpr view auto take_view(iterator auto i, size_t n);
 ```
 
 Wrapper, ktorý vracia object spĺňajúci `view`.
@@ -842,12 +748,12 @@ Wrapper, ktorý vracia object spĺňajúci `view`.
 
 ```cpp
 struct unbounded_t {};
-constexpr unbounded_t unbounded{};
+inline constexpr unbounded_t unbounded{};
 ```
 
 Pre každý iterator `i` vráti `i != unbounded` `false`.
 
-[`view`](#view), ktorý má `unbounded` ako svoj end je nekonečný.
+[`view`](#view), ktorý má `unbounded` ako svoj end, je nekonečný.
 
 ### rational
 
@@ -897,26 +803,15 @@ Trieda reprezentujúca racionálne číslo.
 ```cpp
 struct shift
 {
-	shift(std::size_t count);
+	shift(size_t count);
 };
 
-template <view View>
-constexpr view operator<<(View&& v, shift s);
-
-template <view View>
-constexpr view operator<<(shift s, View&& v);
-
-template <view View>
-constexpr view operator<(View&& v, shift s);
-
-template <view View>
-constexpr view operator<(shift s, View&& v);
-
-template <view View>
-constexpr view operator>(View&& v, shift s);
-
-template <view View>
-constexpr view operator>(shift s, View&& v);
+constexpr view auto operator<<(view auto&& v, shift s);
+constexpr view auto operator<<(shift s, view auto&& v);
+constexpr view auto operator<(view auto&& v, shift s);
+constexpr view auto operator<(shift s, view auto&& v);
+constexpr view auto operator>(view auto&& v, shift s);
+constexpr view auto operator>(shift s, view auto&& v);
 ```
 
 Spolu s niektorým z operatorov vracia posunutý `view`.
