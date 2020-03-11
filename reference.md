@@ -5,6 +5,8 @@ Referencia zápočtového programu PPmatrix.
 # Obsah
 
 * [Koncepty](#Koncepty)
+  * [same](#same)
+  * [nonvoid](#nonvoid)
   * [iterator](#iterator)
   * [view](#view)
   * [matrix_view](#matrix_view)
@@ -39,10 +41,26 @@ Referencia zápočtového programu PPmatrix.
   * [wrap_iterator](#wrap_iterator)
   * [take_iterator](#take_iterator)
 * [Ostatné](#Ostatné)
-  * [unbounded_sentinel](#unbounded_sentinel)
+  * [unbounded](#unbounded)
   * [rational](#rational)
 
 ## Koncepty
+
+### same
+
+```cpp
+template <typename T, typename U>
+concept same = detail::same<T, U>;
+```
+
+Splnený, ak sú typy zhodné.
+
+### nonvoid
+
+```cpp
+template <typename T>
+concept nonvoid = !same<T, void>;
+```
 
 ### iterator
 
@@ -50,9 +68,21 @@ Referencia zápočtového programu PPmatrix.
 template <typename Iterator>
 concept iterator = requires (Iterator i)
 {
-	++i;
-	*i;
+	{ ++i } -> same<Iterator&>;
+	{ *i } -> nonvoid;
 };
+```
+
+### sentinel
+
+```cpp
+template <typename Sentinel, typename Iterator>
+concept sentinel =
+	iterator<Iterator> &&
+	requires (const Iterator i, const Sentinel s)
+	{
+		{ i == s } -> same<bool>;
+	};
 ```
 
 ### view
@@ -61,8 +91,8 @@ concept iterator = requires (Iterator i)
 template <typename View>
 concept view = requires (View v)
 {
-	begin(v);
-	end(v);
+	{ begin(v) } -> iterator;
+	{ end(v) } -> sentinel<decltype(begin(v))>;
 };
 ```
 
@@ -74,7 +104,7 @@ concept matrix_view =
 	view<MatrixView> &&
 	requires (const MatrixView mv)
 	{
-		width(mv);
+		{ width(mv) } -> same<std::size_t>;
 	};
 ```
 
@@ -206,7 +236,7 @@ Pre rovnicu `Mb = v`:
 Ak neexistuje `b`, vráti -1.\
 Ak existuje, vráti počet dimenzií riešenia.
 
-Ak existuje práve jedno riešenie, uloží ho do `v`, inak nechá prvky `v` v neznámom stave.
+Ak existuje práve jedno riešenie, uloží ho do `v`, inak nechá prvky `v` v neurčenom stave.
 
 `flag::height` zapne kontrolu rozmerov matíc.
 
@@ -245,10 +275,10 @@ class static_matrix
 {
 	constexpr explicit static_matrix(std::size_t width);
 
-	constexpr iterator begin();
-	constexpr iterator begin() const;
-	constexpr iterator end();
-	constexpr iterator end() const;
+	constexpr iterator auto begin();
+	constexpr iterator auto begin() const;
+	constexpr iterator auto end();
+	constexpr iterator auto end() const;
 	constexpr std::size_t width() const;
 };
 ```
@@ -263,10 +293,10 @@ class dynamic_matrix
 {
 	dynamic_matrix(std::size_t height, std::size_t width);
 
-	iterator begin();
-	iterator begin() const;
-	iterator end();
-	iterator end() const;
+	iterator auto begin();
+	iterator auto begin() const;
+	iterator auto end();
+	iterator auto end() const;
 	std::size_t width() const;
 	void resize(std::size_t new_height);
 	void resize(std::size_t new_width, resize_columns_tag_t);
@@ -289,8 +319,9 @@ Container s dynamickou veľkosťou spĺňajúci `matrix_view`.
 		template <view View>
 		constexpr simple_view(View&& v);
 		constexpr simple_view(Iterator begin, Sentinel end);
-		constexpr iterator begin() const;
-		constexpr iterator end() const;
+
+		constexpr iterator auto begin() const;
+		constexpr iterator auto end() const;
 	};
 ```
 
@@ -741,8 +772,8 @@ public:
 };
 ```
 
-Pre `wrap_iterator wi(x)`:
-`wi += n` volá `x += n`
+Pre `wrap_iterator wi(x)`:\
+`wi += n` volá `x += n`\
 `*wi` vracia `x`.
 
 
