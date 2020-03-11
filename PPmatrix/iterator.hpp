@@ -7,15 +7,21 @@ namespace PPmatrix
 {
 	namespace detail
 	{
+		// workaround
+		template <typename T, typename U>
+		concept same_lr = same<T, U&>;
+
 		template <typename T>
 		concept has_operator_advance = requires (T t, size_t n)
 		{
-			t += n;
+			{ t += n } -> same_lr<T>;
+			// { t += n } -> same<T&>; // doesn't compile
 		};
 		template <typename T>
 		concept has_operator_back = requires (T t, size_t n)
 		{
-			t -= n;
+			{ t -= n } -> same_lr<T>;
+			// { t -= n } -> same<T&>; // doesn't compile
 		};
 	}
 
@@ -31,13 +37,11 @@ namespace PPmatrix
 	}
 	constexpr auto& operator++(detail::has_operator_advance auto& t)
 	{
-		t += 1;
-		return t;
+		return t += 1;
 	}
 	constexpr auto& operator--(detail::has_operator_back auto& t)
 	{
-		t -= 1;
-		return t;
+		return t -= 1;
 	}
 
 	template <typename Iterator>
