@@ -43,8 +43,6 @@ std::cout << *max_element(a | multiplier);
 // vypíše 12
 ```
 
-[Technické detaily](details.md)
-
 ## Príklad
 
 ```cpp
