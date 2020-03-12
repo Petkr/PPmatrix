@@ -6,9 +6,17 @@
 
 int main()
 {
-	PPmatrix::copy(
-		{ 5, 4, 7, 3, 6 , 8, 4 },
-		std::ostream_iterator<int>(std::cout, " wow ") ^ PPmatrix::unbounded);
-	
+	int width, height;
+
+	std::cin >> width >> height;
+
+	PPmatrix::dynamic_matrix<int> matrix(height, width);
+
+	for (auto&& column : PPmatrix::columns_sentinel(matrix))
+		for (auto&& element : column)
+			std::cin >> element;
+
+	PPmatrix::pretty_print(std::cout, matrix);
+
 	return 0;
 }
