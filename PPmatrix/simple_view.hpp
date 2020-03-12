@@ -2,7 +2,7 @@
 #include <utility>
 #include "view.hpp"
 #include "compressed_pair.hpp"
-#include "unbounded_sentinel_t.hpp"
+#include "unbounded.hpp"
 
 namespace PPmatrix
 {
@@ -22,7 +22,7 @@ namespace PPmatrix
 		{
 			return pair.first;
 		}
-		constexpr iterator auto end() const
+		constexpr auto end() const
 		{
 			return pair.second;
 		}

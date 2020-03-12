@@ -34,17 +34,21 @@ namespace PPmatrix
 		{
 			return PPmatrix::begin(data_);
 		}
-		iterator auto end()
+		auto end()
 		{
 			return PPmatrix::end(data_);
 		}
-		iterator auto end() const
+		auto end() const
 		{
 			return PPmatrix::end(data_);
 		}
 		size_t width() const
 		{
 			return width_;
+		}
+		void flip_dimensions()
+		{
+			width_ = height(*this);
 		}
 		void resize(size_t new_height)
 		{

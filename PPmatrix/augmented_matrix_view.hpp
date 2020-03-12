@@ -193,7 +193,7 @@ namespace PPmatrix
 				PPmatrix::begin(right),
 				PPmatrix::width(right));
 		}
-		iterator auto end() const
+		auto end() const
 		{
 			return augmented_matrix_view_iterator(
 				PPmatrix::end(left),

@@ -147,7 +147,7 @@ namespace PPmatrix
 		{
 			return begin_;
 		}
-		constexpr iterator auto end() const
+		constexpr auto end() const
 		{
 			return end_;
 		}
@@ -205,7 +205,7 @@ namespace PPmatrix
 	{
 		return row(matrix, 0);
 	}
-	constexpr iterator auto rows_end_sentinel(matrix_view auto&& matrix)
+	constexpr auto rows_end_sentinel(matrix_view auto&& matrix)
 	{
 		return end(matrix);
 	}
@@ -226,7 +226,7 @@ namespace PPmatrix
 	{
 		return column(matrix, 0);
 	}
-	constexpr iterator auto columns_end_sentinel(matrix_view auto&& matrix)
+	constexpr auto columns_end_sentinel(matrix_view auto&& matrix)
 	{
 		return begin(matrix) + width(matrix);
 	}

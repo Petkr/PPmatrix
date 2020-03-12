@@ -26,7 +26,7 @@ namespace PPmatrix
 		{
 			return pair.first;
 		}
-		constexpr iterator auto end() const
+		constexpr auto end() const
 		{
 			return pair.second;
 		}
