@@ -34,7 +34,7 @@ Referencia zápočtového programu PPmatrix.
   * [max_element](#max_element)
   * [swap_ranges](#swap_ranges)
   * [zip](#zip)
-* [Iterator adaptory](#iterator-adaptory)
+* [Iterator a view adaptory](#iterator-a-view-adaptory)
   * [skip_iterator](#skip_iterator)
   * [transform_iterator](#transform_iterator)
   * [static_iterator](#static_iterator)
@@ -286,6 +286,30 @@ class dynamic_matrix
 
 Container s dynamickou veľkosťou spĺňajúci `matrix_view`.
 
+```cpp
+void dynamic_matrix::resize(size_t new_height);
+```
+
+Zmení výšku matice na `new_height`. Šírku zachová.
+
+Elementy, ktoré sa zmestia do nového rozmeru,
+sú ponechané nezmenené, vrátane pozície.
+
+Ak je `new_height` väčšia ako pôvodná výška,
+nové elementy sú default constructed.
+
+```cpp
+void dynamic_matrix::resize(size_t new_width, change_width_tag_t);
+```
+
+Zmení šírku matice na `new_width`. Šírku zachová.
+
+Elementy poprehadzuje do nešpecifikovaného poradia,
+ale zachová objekty.
+
+Ak je `new_width` väčšia ako pôvodná šírka,
+nové elementy sú default constructed.
+
 ## Views
 
 ### simple_view
@@ -297,15 +321,31 @@ Container s dynamickou veľkosťou spĺňajúci `matrix_view`.
 	class simple_view
 	{
 	public:
-		constexpr simple_view(view auto&& v);
 		constexpr simple_view(Iterator begin, Sentinel end);
+		constexpr simple_view(view auto&& v);
 
 		constexpr iterator auto begin() const;
 		constexpr iterator auto end() const;
 	};
 ```
 
-Ukladá dvojicu iteratorov begin a end. Spĺňa `view`.
+Ukladá dvojicu iteratorov begin a end. Spĺňa [`view`](#view).
+
+(1)
+
+```cpp
+constexpr simple_view::simple_view(Iterator begin, Sentinel end);
+```
+
+Skopíruje si hodnoty.
+
+(2)
+
+```cpp
+constexpr simple_view::simple_view(view auto&& v);
+```
+
+Ako (1) s parametrami `(begin(v), end(v))`.
 
 ### simple_matrix_view
 
@@ -316,9 +356,9 @@ template <
 class simple_matrix_view
 {
 public:
+	constexpr simple_matrix_view(Iterator begin, Sentinel end, size_t width);
 	constexpr simple_matrix_view(view auto&& v, size_t width);
 	constexpr simple_matrix_view(matrix_view auto&& v);
-	constexpr simple_matrix_view(Iterator begin, Sentinel end, size_t width);
 	constexpr iterator begin() const;
 	constexpr iterator end() const;
 	constexpr size_t width() const;
@@ -328,6 +368,36 @@ public:
 
 Ukladá dvojicu iteratorov begin a end a šírku matice. Spĺňa `matrix_view`.
 
+(1)
+
+```cpp
+constexpr simple_matrix_view::simple_matrix_view(Iterator begin, Sentinel end, size_t width);
+```
+
+Skopíruje si hodnoty.
+
+(2)
+
+```cpp
+constexpr simple_matrix_view::simple_matrix_view(view auto&& v, size_t width);
+```
+
+Ako (1) s parametrami `(begin(v), end(v), width)`.
+
+(3)
+
+```cpp
+constexpr simple_matrix_view::simple_matrix_view(matrix_view auto&& v);
+```
+
+Ako (2) s parametrami `(v, width(v))`.
+
+```cpp
+constexpr void set_width(size_t width);
+```
+
+Nastaví šírku na `width`.
+
 ### augmented_matrix_view
 
 ```cpp
@@ -336,8 +406,8 @@ template <
 	typename RightMatrixView>
 class augmented_matrix_view
 {
-	augmented_matrix_view(matrix_view auto&& left, matrix_view auto&& right);
 	augmented_matrix_view(matrix_view auto&& left, matrix_view auto&& right, dont_check_heights_tag_t);
+	augmented_matrix_view(matrix_view auto&& left, matrix_view auto&& right);
 
 	iterator auto begin() const;
 	iterator auto end() const;
@@ -350,13 +420,31 @@ Reprezentuje
 [rozšírenú maticu sústavy](https://en.wikipedia.org/wiki/Augmented_matrix)
 (A | B).
 
+Matice musia mať rovnakú výšku.
+
 Spĺňa `matrix_view`.
+
+(1)
+
+```cpp
+augmented_matrix_view::augmented_matrix_view(matrix_view auto&& left, matrix_view auto&& right, dont_check_heights_tag_t);
+```
+
+Skopíruje si iteratory a šírky.
+
+(2)
+
+```cpp
+augmented_matrix_view::augmented_matrix_view(matrix_view auto&& left, matrix_view auto&& right);
+```
+
+Ako (1), ale navyše spraví kontrolu rozmerov.
 
 ## Generické algoritmy
 
 Keďže výraz `{1, 2, 3}` nemá v C++ typ, kompilátor nedokáže vydedukovať template parameter, napríklad pri volaní `accumulate({1, 2, 3}, [](auto&& x, auto&& y){ return x + y; })`.
 
-Algoritmy, ktoré akceptujú `view` na konštantné prvky majú teda navyše overloady pre `std::initializer_list`.
+Algoritmy, ktoré akceptujú [`view`](#view) na konštantné prvky majú teda navyše overloady pre `std::initializer_list`.
 
 ### accumulate
 
@@ -415,7 +503,7 @@ constexpr bool equal(view auto&& view1, view auto&& view2);
 
 Určí, či sú `view1` a `view2` zhodné po prvkoch podľa `operator==`.
 
-Z oboch `view` porovnáva iba prvých `std::min(PPmatrix::size(view1), PPmatrix::size(view2))` prvkov.
+Z oboch [`view`](#view) porovnáva iba prvých `std::min(PPmatrix::size(view1), PPmatrix::size(view2))` prvkov.
 
 (2)
 
@@ -578,7 +666,17 @@ constexpr void zip(const std::initializer_list<auto>& l, const std::initializer_
 
 Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
 
-## Iterator adaptory
+## Iterator a view adaptory
+
+[`skip_iterator`](#skip_iterator), [`transform_iterator`](#transform_iterator) a [`take_iterator`](#take_iterator) používajú operatory &, | a || nasledovne:
+
+Pridávaju wrapper triedy [`skip`](#skip), `transform` a `take`.
+
+[`iterator`](#iterator) & wrapper -> wrapper [`iterator`](#iterator)
+
+[`view`](#view) | wrapper -> [`view`](#view) s obalenými begin aj end
+
+[`view`](#view) || wrapper -> [`view`](#view) s obaleným begin, end ponechaný
 
 ### skip_iterator
 
@@ -594,17 +692,24 @@ public:
 	constexpr auto& operator-=(size_t offset);
 	constexpr bool operator==(iterator auto other) const;
 	constexpr auto& base();
+	constexpr auto base() const;
 };
 
+```
+Pre `skip_iterator si(i, sl)`:\
+`si += n` volá `i += n * sl`\
+`*si` vracia `*i`.
+
+##### skip
+
+```cpp
 struct skip
 {
 	skip(size_t skip_length);
 };
 ```
 
-Pre `skip_iterator si(i, sl)`:\
-`si += n` volá `i += n * sl`\
-`*si` vracia `*i`.
+Pozri [vysvetlenie](#iterator-a-view-adaptory).
 
 ### transform_iterator
 
@@ -621,8 +726,18 @@ public:
 	constexpr auto& operator+=(size_t offset);
 	constexpr auto& operator-=(size_t offset);
 	constexpr bool operator==(iterator auto other) const;
+	constexpr auto& base();
+	constexpr auto base() const;
 };
+```
 
+Pre `transform_iterator ti(i, f)`:\
+`ti += n` volá `i += n`\
+`*ti` vracia `f(*i)`.
+
+##### transform
+
+```cpp
 template <typename Functor>
 struct transform
 {
@@ -630,9 +745,7 @@ struct transform
 };
 ```
 
-Pre `transform_iterator ti(i, f)`:\
-`ti += n` volá `i += n`\
-`*ti` vracia `f(*i)`.
+Pozri [vysvetlenie](#iterator-a-view-adaptory).
 
 ### static_iterator
 
@@ -651,7 +764,7 @@ public:
 };
 ```
 
-Iterator, ktorý simuluje nekonečný `view` s rovnakými prvkami.\
+Iterator, ktorý simuluje nekonečný [`view`](#view) s rovnakými prvkami.\
 Jeho `operator+=` nerobí nič a `operator*` vracia obalený objekt.
 
 ##### static_view
@@ -661,7 +774,7 @@ template <typename T>
 constexpr view auto static_view(T&& value)
 ```
 
-Wrapper, ktorý vracia object spĺňajúci `view`.
+Wrapper, ktorý vracia object spĺňajúci [`view`](#view).
 
 ### wrap_iterator
 
@@ -719,10 +832,12 @@ public:
 	constexpr auto& operator+=(size_t offset);
 	constexpr auto& operator-=(size_t offset);
 	constexpr bool operator==(iterator auto i) const;
+	constexpr auto& base();
+	constexpr auto base() const;
 };
 ```
 
-Iterator, ktorý sám simuluje `view`, ktorý si namiesto end pamätá svoju veľkosť.
+Iterator, ktorý sám simuluje [`view`](#view), ktorý si namiesto end pamätá svoju veľkosť.
 
 ##### take
 
@@ -733,7 +848,7 @@ struct take
 };
 ```
 
-Pozri [použitie]().
+Pozri [vysvetlenie](#iterator-a-view-adaptory).
 
 ##### take_view
 
@@ -741,7 +856,7 @@ Pozri [použitie]().
 constexpr view auto take_view(iterator auto i, size_t n);
 ```
 
-Wrapper, ktorý vracia object spĺňajúci `view`.
+Wrapper, ktorý vracia object spĺňajúci [`view`](#view).
 
 ## Ostatné
 
@@ -754,7 +869,7 @@ inline constexpr unbounded_t unbounded{};
 
 Pre každý iterator `i` vráti `i != unbounded` `false`.
 
-[`view`](#view), ktorý má `unbounded` ako svoj end, je nekonečný.
+[[`view`](#view)](#view), ktorý má `unbounded` ako svoj end, je nekonečný.
 
 ### rational
 
@@ -815,7 +930,7 @@ constexpr view auto operator>(view auto&& v, shift s);
 constexpr view auto operator>(shift s, view auto&& v);
 ```
 
-Spolu s niektorým z operatorov vracia posunutý `view`.
+Spolu s niektorým z operatorov vracia posunutý [`view`](#view).
 
 `v << shift(n)` posunie begin a end o `n` späť\
 `v >> shift(n)` posunie begin a end o `n` dopredu\
