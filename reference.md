@@ -1,10 +1,10 @@
-﻿# PPmatrix
+﻿# PPmatrix referencia
 
 Referencia zápočtového programu PPmatrix.
 
 # Obsah
 
-* [Koncepty](#Koncepty)
+* [Koncepty](#koncepty)
   * [same](#same)
   * [nonvoid](#nonvoid)
   * [iterator](#iterator)
@@ -20,7 +20,7 @@ Referencia zápočtového programu PPmatrix.
 * [Maticové containery](#maticové-containery)
   * [static_matrix](#static_matrix)
   * [dynamic_matrix](#dynamic_matrix)
-* [Views](#Views)
+* [Views](#views)
   * [simple_view](#simple_view)
   * [simple_matrix_view](#simple_matrix_view)
   * [augmented_matrix_view](#augmented_matrix_view)
@@ -40,9 +40,10 @@ Referencia zápočtového programu PPmatrix.
   * [static_iterator](#static_iterator)
   * [wrap_iterator](#wrap_iterator)
   * [take_iterator](#take_iterator)
-* [Ostatné](#Ostatné)
+* [Ostatné](#ostatné)
   * [unbounded](#unbounded)
   * [rational](#rational)
+  * [shift](#shift)
 
 ## Koncepty
 

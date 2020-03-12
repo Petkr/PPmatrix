@@ -1,8 +1,9 @@
 # PPmatrix
 
-Knižnica pre prácu s maticami inšpirovaná a čiastočne využívajúca Ranges a Concepts z C++20.
+Knižnica pre prácu s maticami inšpirovaná a čiastočne
+využívajúca Ranges a Concepts z C++20.
 
-## Operácie na maticiach
+## Implementované operácie na maticiach
 
 * sčítanie
 * násobenie matice maticou a skalárom
@@ -11,17 +12,20 @@ Knižnica pre prácu s maticami inšpirovaná a čiastočne využívajúca Range
 * úprava na REF a RREF
 * rank
 * determinant
-* riešenie sústavy linárnych rovníc
+* riešenie sústavy lineárnych rovníc
 
-## Ďalšie informácie
+## Základné informácie
 
-Knižnica implementuje všetky maticové operácie ako nečlenské šablónové funkcie.
+**Rozsah, v ktorom knižnica používa C++20,
+implementuje dostatočne zatiaľ iba GCC 10.**
 
-Definuje koncepty
-[`view`](reference.md#view)
-a
-[`matrix_view`](reference.md#matrix_view)
-, ktoré tieto funkcie používajú.
+Obsahuje iba header súbory.
+
+Implementuje všetky maticové operácie ako nonmember template funkcie.
+
+Definuje koncepty [`view`](reference.md#view)
+a [`matrix_view`](reference.md#matrix_view),
+ktoré tieto funkcie používajú.
 
 Knižnica predpokladá, že typy spĺňajúce
 [`matrix_view`](reference.md#matrix_view)
@@ -38,6 +42,8 @@ transform multiplier = [](auto&& x) { return x * 2; };
 std::cout << *max_element(a | multiplier);
 // vypíše 12
 ```
+
+[Technické detaily](details.md)
 
 ## Príklad
 
@@ -64,6 +70,16 @@ výstup:
 |3|
 ```
 
+[Viac ukážok kódu.](examples.md)
+
+## Použitie
+
+Knižnica pozostáva čisto z header súborov, takže stačí adresár PPmatrix
+nakopírovať do nejakého include directory.
+
+Súbor [PPmatrix/PPmatrix.hpp](PPmatrix/PPmatrix.hpp)
+obsahuje všetky header súbory knižnice.
+
 ## Referencia
 
 [reference](reference.md)
@@ -72,12 +88,12 @@ výstup:
 
 Knižnica na niektorých miestach ticho predpokladá, že iteratory sú random access.
 Napríklad na všetkých wrapper iteratoroch implementuje iba `operator+=`
-a v [operators.hpp](PPmatrix/operators.hpp)
-implementuje `operator++` ako volanie `operator+=` s argumentom 1.
+a v [iterator.hpp](PPmatrix/iterator.hpp) implementuje `operator++`
+ako volanie `operator+=` s argumentom 1.
 
 Iterator, ktorý používa
 [`augmented_matrix_view`](reference.md#augmented_matrix_view),
-je na iterator *obrovský*. Na 64-bit s internými iteratormi `T*` má 56B.
+je na iterator *obrovský*. Na 64-bit s internými pointer iteratormi má 56B.
 
 [`augmented_matrix_view`](reference.md#augmented_matrix_view)
 má hlúpo implementovaný `operator+=`, ktorý pre `x += n` volá n-krát `++x`.
