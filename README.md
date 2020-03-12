@@ -31,7 +31,7 @@ Knižnica predpokladá, že typy spĺňajúce
 [`matrix_view`](reference.md#matrix_view)
 majú prvky uložené *po riadkoch*.
 
-Implementuje generické algoritmy pracujúce s konceptom `view`
+Implementuje generické algoritmy pracujúce s konceptom [`view`](reference.md#view)
 (napr. [`PPmatrix::copy`](reference.md#copy)).
 
 Poskytuje funkčné programovanie s lazy evaluation ako v Ranges:
