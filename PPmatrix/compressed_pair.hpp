@@ -29,56 +29,26 @@ namespace PPmatrix
 		template <typename Empty, typename Second>
 		struct compressed_pair_empty_first
 		{
-			union
-			{
-				Second second;
-				Empty first;
-			};
+			[[no_unique_address]]
+			Empty first;
+
+			Second second;
 
 			constexpr compressed_pair_empty_first(Empty, Second second)
 				: second(second)
 			{}
-			// **might be redundant**
-			// in case of non-trivial special member functions in the union
-			constexpr compressed_pair_empty_first(const compressed_pair_empty_first& other)
-				: second(other.second)
-			{}
-			constexpr auto& operator=(const compressed_pair_empty_first& other)
-			{
-				second = other.second;
-				return *this;
-			}
-			~compressed_pair_empty_first()
-			{
-				second.~Second();
-			}
 		};
 		template <typename First, typename Empty>
 		struct compressed_pair_empty_second
 		{
-			union
-			{
-				First first;
-				Empty second;
-			};
+			First first;
+
+			[[no_unique_address]]
+			Empty second;
 		
 			constexpr compressed_pair_empty_second(First first, Empty)
 				: first(first)
 			{}
-			// **might be redundant**
-			// in case of non-trivial special member functions in the union
-			constexpr compressed_pair_empty_second(const compressed_pair_empty_second& other)
-				: first(other.first)
-			{}
-			constexpr auto& operator=(const compressed_pair_empty_second& other)
-			{
-				first = other.first;
-				return *this;
-			}
-			~compressed_pair_empty_second()
-			{
-				first.~First();
-			}
 		};
 
 		template <typename First, typename Second>
