@@ -244,7 +244,7 @@ Upraví maticu `matrix` do (R)REF.
 
 ## Maticové containery
 
-Základné containery, ktoré spĺňajú `matrix_view`.
+Základné containery, ktoré spĺňajú [`matrix_view`](#matrix_view).
 
 ### static_matrix
 
@@ -264,7 +264,7 @@ class static_matrix
 };
 ```
 
-Container so statickou veľkosťou spĺňajúci `matrix_view`.
+Container so statickou veľkosťou spĺňajúci [`matrix_view`](#matrix_view).
 
 ### dynamic_matrix
 
@@ -284,7 +284,7 @@ class dynamic_matrix
 };
 ```
 
-Container s dynamickou veľkosťou spĺňajúci `matrix_view`.
+Container s dynamickou veľkosťou spĺňajúci [`matrix_view`](#matrix_view).
 
 ```cpp
 void dynamic_matrix::resize(size_t new_height);
@@ -329,7 +329,9 @@ nové elementy sú default constructed.
 	};
 ```
 
-Ukladá dvojicu iteratorov begin a end. Spĺňa [`view`](#view).
+Ukladá dvojicu iteratorov begin a end.
+
+Spĺňa [`view`](#view).
 
 (1)
 
@@ -366,7 +368,7 @@ public:
 };
 ```
 
-Ukladá dvojicu iteratorov begin a end a šírku matice. Spĺňa `matrix_view`.
+Ukladá dvojicu iteratorov begin a end a šírku matice. Spĺňa [`matrix_view`](#matrix_view).
 
 (1)
 
@@ -668,9 +670,10 @@ Zhodné s (1). Pozri [vysvetlenie](#generické-algoritmy).
 
 ## Iterator a view adaptory
 
-[`skip_iterator`](#skip_iterator), [`transform_iterator`](#transform_iterator) a [`take_iterator`](#take_iterator) používajú operatory &, | a || nasledovne:
+[`skip_iterator`](#skip_iterator) a [`transform_iterator`](#transform_iterator)
+používajú operatory `&`, `|` a `||` nasledovne:
 
-Pridávaju wrapper triedy [`skip`](#skip), `transform` a `take`.
+Pridávaju wrapper triedy [`skip`](#skip) a [`transform`](#transform)
 
 [`iterator`](#iterator) & wrapper -> wrapper [`iterator`](#iterator)
 
@@ -747,6 +750,14 @@ struct transform
 
 Pozri [vysvetlenie](#iterator-a-view-adaptory).
 
+##### transform_view
+
+```cpp
+constexpr view auto transform_view(view auto&& v, auto f);
+```
+
+Vracia transformovaný [`view`](#view).
+
 ### static_iterator
 
 ```cpp
@@ -764,7 +775,7 @@ public:
 };
 ```
 
-Iterator, ktorý simuluje nekonečný [`view`](#view) s rovnakými prvkami.\
+Iterator, ktorý simuluje [`view`](#view) s rovnakými prvkami.\
 Jeho `operator+=` nerobí nič a `operator*` vracia obalený objekt.
 
 ##### static_view
@@ -774,7 +785,7 @@ template <typename T>
 constexpr view auto static_view(T&& value)
 ```
 
-Wrapper, ktorý vracia object spĺňajúci [`view`](#view).
+Vracia nekonečný [`view`](#view) s konštantnou hodnotou `value`.
 
 ### wrap_iterator
 
@@ -808,7 +819,8 @@ Pre `wrap_iterator wi(x)`:\
 constexpr view auto wrap_view(auto&& begin, auto&& end);
 ```
 
-Vracia [`view`](#view), ktorý má begin a end typu [`wrap_iterator`](#wrap_iterator).
+Vracia [`view`](#view), ktorý má begin a end
+typu [`wrap_iterator`](#wrap_iterator).
 
 (2)
 
@@ -848,15 +860,44 @@ struct take
 };
 ```
 
-Pozri [vysvetlenie](#iterator-a-view-adaptory).
+Používa sa ako pravý argument pre operatory `&`, `|` a `||` podobne
+ako [`skip`](#skip) a [`transform`](#transform).
+
+[`iterator`](#iterator) `&` [`take`](#take)
+-> [`take_iterator`](#take_iterator)
+
+[`view`](#view) `|` [`take`](#take)
+zhodné s [`take_view`](#take_view) (2)
+
+[`view`](#view) `||` [`take`](#take)
+zhodné s [`take_view`](#take_view) (1) pre `begin(view)`
 
 ##### take_view
+
+(1)
 
 ```cpp
 constexpr view auto take_view(iterator auto i, size_t n);
 ```
 
-Wrapper, ktorý vracia object spĺňajúci [`view`](#view).
+Vracia [`view`](#view) s `i` ako begin a end o `i + n`.
+
+`i + n` nikdy nevyhodnocuje.
+
+(2)
+
+```cpp
+constexpr view auto take_view(view auto&& v, size_t n)
+```
+
+Vracia [`view`](#view) s begin `begin(v)` a end ako bližšie z:
+* `begin(v) + n`
+* `end(v)`
+
+`begin(v) + n` nikdy nevyhodnocuje.
+
+[`view`](#view) `v` neprechádza, keďže vzdialenosť nepočíta,
+ale pamätá si obe možnosti pre end.
 
 ## Ostatné
 
@@ -867,9 +908,9 @@ struct unbounded_t {};
 inline constexpr unbounded_t unbounded{};
 ```
 
-Pre každý iterator `i` vráti `i != unbounded` `false`.
+Pre každý iterator `i` vráti `i == unbounded` `false`.
 
-[[`view`](#view)](#view), ktorý má `unbounded` ako svoj end, je nekonečný.
+[`view`](#view), ktorý má [`unbounded`](#unbounded) ako svoj end, je nekonečný.
 
 ### rational
 
