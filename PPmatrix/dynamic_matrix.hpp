@@ -5,8 +5,8 @@
 
 namespace PPmatrix
 {
-	struct resize_columns_tag_t {};
-	constexpr resize_columns_tag_t resize_columns_tag{};
+	struct change_width_tag_t {};
+	constexpr change_width_tag_t change_width_tag{};
 
 	template <typename T, template <typename> typename container = std::vector>
 	requires requires (container<T> c, size_t size)
@@ -54,7 +54,7 @@ namespace PPmatrix
 		{
 			data_.resize(width_ * new_height);
 		}
-		void resize(size_t new_width, resize_columns_tag_t)
+		void resize(size_t new_width, change_width_tag_t)
 		{
 			auto old_height = height(*this);
 			width_ = new_width;
