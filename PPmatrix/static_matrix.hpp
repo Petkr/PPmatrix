@@ -24,11 +24,11 @@ namespace PPmatrix
 		{
 			return PPmatrix::begin(data_);
 		}
-		constexpr iterator auto end()
+		constexpr auto end()
 		{
 			return PPmatrix::end(data_);
 		}
-		constexpr iterator auto end() const
+		constexpr auto end() const
 		{
 			return PPmatrix::end(data_);
 		}
