@@ -32,7 +32,7 @@ Knižnica predpokladá, že typy spĺňajúce
 majú prvky uložené *po riadkoch*.
 
 Implementuje generické algoritmy pracujúce s konceptom [`view`](reference.md#view)
-(napr. [`PPmatrix::copy`](reference.md#copy)).
+(napr. [`copy`](reference.md#copy)).
 
 Poskytuje funkčné programovanie s lazy evaluation ako v Ranges:
 
@@ -78,7 +78,7 @@ nakopírovať do nejakého include directory.
 Súbor [PPmatrix/PPmatrix.hpp](PPmatrix/PPmatrix.hpp)
 include-uje všetky header súbory knižnice.
 
-Pre testovanie sú súčasťou repository CMake súbory a main.cpp s ukážkovým kódom.
+Pre testovanie sú súčasťou repository CMake súbory a [main.cpp](PPmatrix/main.cpp) s ukážkovým kódom.
 
 ## Referencia
 
@@ -86,10 +86,12 @@ Pre testovanie sú súčasťou repository CMake súbory a main.cpp s ukážkový
 
 ## Nedostatky
 
-Knižnica na niektorých miestach ticho predpokladá, že iteratory sú random access.
-Napríklad na všetkých wrapper iteratoroch implementuje iba `operator+=`
+Knižnica na niektorých miestach ticho predpokladá, že iteratory sú
+[contiguous iterator](https://en.cppreference.com/w/cpp/named_req/ContiguousIterator).
+Na všetkých wrapper iteratoroch implementuje iba `operator+=`
 a v [iterator.hpp](PPmatrix/iterator.hpp) implementuje `operator++`
-ako volanie `operator+=` s argumentom 1.
+ako volanie `operator+=` s argumentom 1. Tiež používa `operator++`
+na posunutie z posledného prvku riadka na prvý prvok nasledujúceho.
 
 Iterator, ktorý používa
 [`augmented_matrix_view`](reference.md#augmented_matrix_view),
