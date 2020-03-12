@@ -29,6 +29,14 @@ namespace PPmatrix
 		{
 			return pair.first == other;
 		}
+		constexpr auto& base()
+		{
+			return pair.first;
+		}
+		constexpr auto base() const
+		{
+			return pair.first;
+		}
 	};
 
 	template <typename Functor>

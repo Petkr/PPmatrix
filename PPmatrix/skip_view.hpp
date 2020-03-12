@@ -32,8 +32,11 @@ namespace PPmatrix
 		{
 			return base_iterator == other;
 		}
-
 		constexpr auto& base()
+		{
+			return base_iterator;
+		}
+		constexpr auto base() const
 		{
 			return base_iterator;
 		}
