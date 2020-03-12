@@ -1,6 +1,6 @@
 #pragma once
 #include "view.hpp"
-#include "unbounded_sentinel_t.hpp"
+#include "unbounded.hpp"
 
 namespace PPmatrix
 {
@@ -46,14 +46,14 @@ namespace PPmatrix
 	};
 
 	template <typename T, typename U>
-	constexpr view wrap_view(T&& begin, U&& end)
+	constexpr view auto wrap_view(T&& begin, U&& end)
 	{
 		return wrap_iterator(std::forward<T>(begin)) ^ wrap_iterator(std::forward<U>(end));
 	}
 
 	template <typename T>
-	constexpr view wrap_view(T&& begin)
+	constexpr view auto wrap_view(T&& begin)
 	{
-		return wrap_iterator(std::forward<T>(begin)) ^ unbounded_sentinel;
+		return wrap_iterator(std::forward<T>(begin)) ^ unbounded;
 	}
 }
