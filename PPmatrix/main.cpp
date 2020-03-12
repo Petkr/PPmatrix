@@ -6,17 +6,17 @@
 
 int main()
 {
-	int width, height;
+	PPmatrix::dynamic_matrix<int> A(2, 2);
+	PPmatrix::copy({ 1, 2, 1, 3 }, A);
 
-	std::cin >> width >> height;
+	PPmatrix::static_matrix<int, 2> b(1);
+	PPmatrix::copy({ 10, 13 }, b);
 
-	PPmatrix::dynamic_matrix<int> matrix(height, width);
+	PPmatrix::pretty_print(std::cout, PPmatrix::augmented_matrix_view(A, b));
 
-	for (auto&& column : PPmatrix::columns_sentinel(matrix))
-		for (auto&& element : column)
-			std::cin >> element;
+	PPmatrix::solve_linear_equations(A, b);
 
-	PPmatrix::pretty_print(std::cout, matrix);
+	PPmatrix::pretty_print(std::cout, b);
 
 	return 0;
 }

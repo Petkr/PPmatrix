@@ -4,6 +4,8 @@
 
 namespace PPmatrix
 {
+	// calculates the width of a number when printed
+
 	consteval size_t number_width(std::floating_point auto number)
 	{
 		return 1;

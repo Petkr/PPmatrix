@@ -49,6 +49,7 @@ namespace PPmatrix
 		return size(A) == size(B) && width(A) == width(B);
 	}
 
+	// behaves as a view as well as an iterator
 	template <iterator Iterator>
 	class row_t
 	{
@@ -89,6 +90,7 @@ namespace PPmatrix
 	template <matrix_view MatrixView>
 	row_t(MatrixView&&, size_t) -> row_t<begin_t<MatrixView>>;
 
+	// behaves as a view as well as an iterator
 	template <iterator Iterator>
 	class column_t
 	{
@@ -133,6 +135,7 @@ namespace PPmatrix
 	template <matrix_view MatrixView>
 	column_t(MatrixView&&, size_t) -> column_t<begin_t<MatrixView>>;
 
+	// behaves as a view as well as an iterator
 	template <iterator Iterator>
 	class column_sentinel_t
 	{

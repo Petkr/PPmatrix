@@ -7,6 +7,14 @@ namespace PPmatrix
 
 	namespace detail
 	{
+		// saves memory when one type from the pair is empty
+		//
+		// useful in simple_view with unbounded, where the only
+		// information is the type of its end iterator, not data
+		//
+		// for the same reason also in transform_iterator,
+		// if the transform is a captureless lambda or other empty functor
+
 		template <typename First, typename Second>
 		struct compressed_pair_nonempty
 		{
@@ -30,6 +38,8 @@ namespace PPmatrix
 			constexpr compressed_pair_empty_first(Empty, Second second)
 				: second(second)
 			{}
+			// **might be redundant**
+			// in case of non-trivial special member functions in the union
 			constexpr compressed_pair_empty_first(const compressed_pair_empty_first& other)
 				: second(other.second)
 			{}
@@ -55,6 +65,8 @@ namespace PPmatrix
 			constexpr compressed_pair_empty_second(First first, Empty)
 				: first(first)
 			{}
+			// **might be redundant**
+			// in case of non-trivial special member functions in the union
 			constexpr compressed_pair_empty_second(const compressed_pair_empty_second& other)
 				: first(other.first)
 			{}
