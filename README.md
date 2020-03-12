@@ -76,7 +76,9 @@ Knižnica pozostáva čisto z header súborov, takže stačí adresár PPmatrix
 nakopírovať do nejakého include directory.
 
 Súbor [PPmatrix/PPmatrix.hpp](PPmatrix/PPmatrix.hpp)
-obsahuje všetky header súbory knižnice.
+include-uje všetky header súbory knižnice.
+
+Pre testovanie sú súčasťou repository CMake súbory a main.cpp s ukážkovým kódom.
 
 ## Referencia
 
