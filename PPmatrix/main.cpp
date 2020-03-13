@@ -6,6 +6,11 @@
 
 int main()
 {
+	std::array<int, 5> arr;
+
+	[[maybe_unused]]
+	auto v = PPmatrix::simple_view(arr);
+
 	PPmatrix::dynamic_matrix<int> A(2, 2);
 	PPmatrix::copy({ 1, 2, 1, 3 }, A);
 
