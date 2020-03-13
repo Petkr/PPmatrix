@@ -2,6 +2,7 @@
 #include <cstddef>
 #include <vector>
 #include "view.hpp"
+#include "PP.hpp"
 
 namespace PPmatrix
 {
@@ -28,19 +29,19 @@ namespace PPmatrix
 
 		iterator auto begin()
 		{
-			return PPmatrix::begin(data_);
+			return PP::begin(data_);
 		}
 		iterator auto begin() const
 		{
-			return PPmatrix::begin(data_);
+			return PP::begin(data_);
 		}
 		auto end()
 		{
-			return PPmatrix::end(data_);
+			return PP::end(data_);
 		}
 		auto end() const
 		{
-			return PPmatrix::end(data_);
+			return PP::end(data_);
 		}
 		size_t width() const
 		{

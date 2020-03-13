@@ -1,5 +1,6 @@
 #pragma once
 #include "zip.hpp"
+#include "PP.hpp"
 
 namespace PPmatrix
 {
@@ -21,7 +22,7 @@ namespace PPmatrix
 	{
 		constexpr auto copy = [](view auto&& from, view auto&& to)
 		{
-			PPmatrix::copy(from, to);
+			PP::copy(from, to);
 		};
 	}
 }

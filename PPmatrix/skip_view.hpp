@@ -51,7 +51,7 @@ namespace PPmatrix
 
 		constexpr iterator auto aligned_end(view auto&& v)
 		{
-			return end(v) + skip_length - PPmatrix::size(v) % skip_length;
+			return end(v) + skip_length - size(v) % skip_length;
 		}
 	};
 

@@ -2,6 +2,7 @@
 #include "simple_matrix_view.hpp"
 #include "matrix_view.hpp"
 #include "prev.hpp"
+#include "PP.hpp"
 
 namespace PPmatrix
 {
@@ -188,26 +189,26 @@ namespace PPmatrix
 		iterator auto begin() const
 		{
 			return augmented_matrix_view_iterator(
-				PPmatrix::begin(left),
-				PPmatrix::width(left),
-				PPmatrix::begin(right),
-				PPmatrix::width(right));
+				PP::begin(left),
+				PP::width(left),
+				PP::begin(right),
+				PP::width(right));
 		}
 		auto end() const
 		{
 			return augmented_matrix_view_iterator(
-				PPmatrix::end(left),
-				PPmatrix::width(left),
-				PPmatrix::end(right),
-				PPmatrix::width(right));
+				PP::end(left),
+				PP::width(left),
+				PP::end(right),
+				PP::width(right));
 		}
 		size_t width() const
 		{
-			return PPmatrix::width(left) + PPmatrix::width(right);
+			return PP::width(left) + PP::width(right);
 		}
 		size_t size() const
 		{
-			return PPmatrix::size(left) + PPmatrix::size(right);
+			return PP::size(left) + PP::size(right);
 		}
 	};
 	augmented_matrix_view(matrix_view auto&& left, matrix_view auto&& right)

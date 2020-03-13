@@ -34,6 +34,6 @@ namespace PPmatrix
 
 	constexpr size_t height(matrix_view auto&& matrix)
 	{
-		return PPmatrix::size(matrix) / width(matrix);
+		return size(matrix) / width(matrix);
 	}
 }

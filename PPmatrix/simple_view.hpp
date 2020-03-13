@@ -3,6 +3,7 @@
 #include "view.hpp"
 #include "compressed_pair.hpp"
 #include "unbounded.hpp"
+#include "PP.hpp"
 
 namespace PPmatrix
 {
@@ -12,11 +13,11 @@ namespace PPmatrix
 		compressed_pair<Iterator, Sentinel> pair;
 
 	public:
-		constexpr simple_view(view auto&& v)
-			: pair{ PPmatrix::begin(v), PPmatrix::end(v) }
-		{}
 		constexpr simple_view(Iterator begin, Sentinel end)
 			: pair{ begin, end }
+		{}
+		constexpr simple_view(view auto&& v)
+			: simple_view(PP::begin(v), PP::end(v))
 		{}
 		constexpr iterator auto begin() const
 		{

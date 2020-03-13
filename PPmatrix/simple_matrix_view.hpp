@@ -1,6 +1,7 @@
 #pragma once
 #include "compressed_pair.hpp"
 #include "matrix_view.hpp"
+#include "PP.hpp"
 
 namespace PPmatrix
 {
@@ -11,16 +12,15 @@ namespace PPmatrix
 		compressed_pair<Iterator, Sentinel> pair;
 
 	public:
-		constexpr simple_matrix_view(view auto&& v, size_t width)
-			: width_(width)
-			, pair{ PPmatrix::begin(v), PPmatrix::end(v) }
-		{}
-		constexpr simple_matrix_view(matrix_view auto&& v)
-			: simple_matrix_view(v, PPmatrix::width(v))
-		{}
 		constexpr simple_matrix_view(Iterator begin, Sentinel end, size_t width)
 			: width_(width)
 			, pair{ begin, end }
+		{}
+		constexpr simple_matrix_view(view auto&& v, size_t width)
+			: simple_matrix_view(PP::begin(v), PP::end(v), width)
+		{}
+		constexpr simple_matrix_view(matrix_view auto&& v)
+			: simple_matrix_view(v, PP::width(v))
 		{}
 		constexpr iterator auto begin() const
 		{

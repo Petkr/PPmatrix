@@ -1,6 +1,7 @@
 #pragma once
 #include <utility>
 #include <type_traits>
+#include "PP.hpp"
 
 namespace PPmatrix
 {
@@ -39,7 +40,7 @@ namespace PPmatrix
 	{
 		constexpr auto number_width = [](auto&& x)
 		{
-			return PPmatrix::number_width(x);
+			return PP::number_width(x);
 		};
 	}
 }

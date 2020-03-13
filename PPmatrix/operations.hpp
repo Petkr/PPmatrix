@@ -636,7 +636,7 @@ namespace PPmatrix
 
 		auto w = width(M);
 		augmented_matrix_view matrix(M, v);
-
+		
 		auto r = REF_reduced_rank(matrix);
 
 		size_t sub_rank = 0;
@@ -666,7 +666,7 @@ namespace PPmatrix
 			{
 				out << '|';
 				auto i = begin(row);
-				for (; i != PPmatrix::prev(end(row)); ++i)
+				for (; i != prev(end(row)); ++i)
 				{
 					printer(*i);
 					out << ' ';
