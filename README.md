@@ -92,7 +92,7 @@ s ukážkovým kódom.
 Knižnica na niektorých miestach ticho predpokladá, že iteratory sú
 [contiguous iterator](https://en.cppreference.com/w/cpp/named_req/ContiguousIterator).
 Na všetkých wrapper iteratoroch implementuje iba `operator+=`
-a v [iterator.hpp](PPmatrix/iterator.hpp) implementuje `operator++`
+a v [iterator.hpp](PPmatrix/iterator.hpp#L38) implementuje `operator++`
 ako volanie `operator+=` s argumentom 1. Tiež používa `operator++`
 na posunutie z posledného prvku riadka na prvý prvok nasledujúceho.
 
