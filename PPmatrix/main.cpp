@@ -6,10 +6,6 @@
 
 int main()
 {
-	int* p;
-	PPmatrix::transform t = []() { return 2; };
-	std::cout << sizeof(p & t) << std::endl;
-
 	PPmatrix::dynamic_matrix<int> A(2, 2);
 	PPmatrix::copy({ 1, 2, 1, 3 }, A);
 
