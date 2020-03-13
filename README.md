@@ -3,16 +3,7 @@
 Knižnica pre prácu s maticami inšpirovaná a čiastočne
 využívajúca Ranges a Concepts z C++20.
 
-## Implementované operácie na maticiach
-
-* sčítanie
-* násobenie matice maticou a skalárom
-* transpozícia
-* elementárne riadkové operácie
-* úprava na REF a RREF
-* rank
-* determinant
-* riešenie sústavy lineárnych rovníc
+Zápočtový program.
 
 ## Základné informácie
 
@@ -38,11 +29,22 @@ Poskytuje funkčné programovanie s lazy evaluation ako v Ranges:
 
 ```cpp
 std::array<int, 6> a = { 1, 4, 6, 2, -5 };
-transform multiplier = [](auto&& x) { return x * 2; };
-std::cout << *max_element(a | multiplier);
+PPmatrix::transform multiplier = [](auto&& x) { return x * 2; };
+std::cout << *PPmatrix::max_element(a | multiplier);
 // vypíše 12
 ```
 
+## Implementované operácie na maticiach
+
+* sčítanie
+* násobenie matice maticou a skalárom
+* transpozícia
+* elementárne riadkové operácie
+* úprava na REF a RREF
+* rank
+* determinant
+* riešenie sústavy lineárnych rovníc
+* 
 ## Príklad
 
 ```cpp
@@ -75,10 +77,11 @@ výstup:
 Knižnica pozostáva čisto z header súborov, takže stačí adresár PPmatrix
 nakopírovať do nejakého include directory.
 
-Súbor [PPmatrix/PPmatrix.hpp](PPmatrix/PPmatrix.hpp)
+Súbor [PPmatrix.hpp](PPmatrix/PPmatrix.hpp)
 include-uje všetky header súbory knižnice.
 
-Pre testovanie sú súčasťou repository CMake súbory a [main.cpp](PPmatrix/main.cpp) s ukážkovým kódom.
+Pre testovanie sú súčasťou repository CMake súbory a [main.cpp](PPmatrix/main.cpp)
+s ukážkovým kódom.
 
 ## Referencia
 
