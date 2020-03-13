@@ -20,35 +20,20 @@ namespace PPmatrix
 		{
 			First first;
 			Second second;
-
-			constexpr compressed_pair_nonempty(First first, Second second)
-				: first(first)
-				, second(second)
-			{}
 		};
 		template <typename Empty, typename Second>
 		struct compressed_pair_empty_first
 		{
 			[[no_unique_address]]
 			Empty first;
-
 			Second second;
-
-			constexpr compressed_pair_empty_first(Empty, Second second)
-				: second(second)
-			{}
 		};
 		template <typename First, typename Empty>
 		struct compressed_pair_empty_second
 		{
 			First first;
-
 			[[no_unique_address]]
-			Empty second;
-		
-			constexpr compressed_pair_empty_second(First first, Empty)
-				: first(first)
-			{}
+			Empty second{};
 		};
 
 		template <typename First, typename Second>
@@ -64,5 +49,5 @@ namespace PPmatrix
 	}
 
 	template <typename First, typename Second>
-	using compressed_pair = typename decltype(detail::compressed_pair_dispatch<First, Second>())::type;
+	using compressed_pair = decltype(detail::compressed_pair_dispatch<First, Second>())::type;
 }
