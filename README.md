@@ -44,7 +44,7 @@ std::cout << *PPmatrix::max_element(a | multiplier);
 * rank
 * determinant
 * riešenie sústavy lineárnych rovníc
-* 
+
 ## Príklad
 
 ```cpp
