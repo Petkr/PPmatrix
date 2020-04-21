@@ -25,7 +25,7 @@ majú prvky uložené *po riadkoch*.
 Implementuje generické algoritmy pracujúce s konceptom [`view`](reference.md#view)
 (napr. [`copy`](reference.md#copy)).
 
-Poskytuje funkčné programovanie s lazy evaluation ako v Ranges:
+Poskytuje funkcionálne programovanie s lazy evaluation ako v Ranges:
 
 ```cpp
 std::array<int, 6> a = { 1, 4, 6, 2, -5 };
